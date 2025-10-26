@@ -1,0 +1,70 @@
+# rag_pipeline.py
+# Integrate CDC summary data with LangChain and your vector database.
+
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate
+import pandas as pd
+import os
+
+os.environ["OPENAI_API_KEY"] = "your_api_key_here"
+
+def build_vectorstore(cdc_summary_file="cdc_data.csv", persist_dir="chroma_db"):
+    """Embed CDC records into a persistent Chroma vector database."""
+    df = pd.read_csv(cdc_summary_file)
+    text_data = [
+        f"{row['Year']}: {row['COVID-19 Deaths']} total deaths"
+        for _, row in df.iterrows() if 'Year' in df.columns
+    ]
+    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    docs = splitter.create_documents(text_data)
+    vectorstore = Chroma.from_documents(
+        documents=docs,
+        embedding=OpenAIEmbeddings(),
+        persist_directory=persist_dir,
+    )
+    vectorstore.persist()
+    return vectorstore
+
+
+def create_rag_chain(vectorstore):
+    """Initialize the LangChain RetrievalQA chain."""
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+
+    prompt_template = """You are a CDC data assistant.
+Use the following data summary to answer user queries on COVID-19 deaths.
+If you don’t know, respond with 'Data not found in CDC records.'
+
+Context:
+{context}
+Question: {question}
+Helpful answer:"""
+
+    prompt = PromptTemplate(
+        input_variables=["context", "question"],
+        template=prompt_template
+    )
+
+    llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
+    qa = RetrievalQA.from_chain_type(
+        llm=llm,
+        retriever=retriever,
+        chain_type="stuff",
+        chain_type_kwargs={"prompt": prompt}
+    )
+    return qa
+
+
+def run_rag_query(query_text):
+    """Run a CDC question through the RAG chain."""
+    vectorstore = Chroma(persist_directory="chroma_db", embedding_function=OpenAIEmbeddings())
+    rag_chain = create_rag_chain(vectorstore)
+    answer = rag_chain.run(query_text)
+    return answer
+
+
+if __name__ == "__main__":
+    build_vectorstore()
+    print(run_rag_query("What year had the highest COVID-19 deaths?"))
