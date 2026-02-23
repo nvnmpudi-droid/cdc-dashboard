@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+cdc_data.csv
+data/
+.env
+OPENAI_API_KEY
+pip-install.log
+*.log
