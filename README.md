@@ -1,4 +1,91 @@
+Perfect. Here’s an updated README snippet for OSIS with the Kāma Sūtra-inspired Stakeholder Influence Agent included as a Phase 2 / last-phase layer in the 8-agent architecture. I’ve integrated it in Western scientific language, while keeping the epistemic rigor and phased rollout clear.
 
+⸻
+
+
+# 📘 OSIS: Organizational Strategy Intelligence System  
+**Current Build: v1.0.1 | Neuro-Symbolic Prototype**  
+
+---
+
+## 🧭 Project Status
+
+OSIS now runs a **3-Tier Tarka Validation Engine** over live CDC Mortality data. Core agents handle:  
+- **Tier 0:** Data Ingestion  
+- **Tier 1:** Domain Adapter (schema-driven)  
+- **Tier 2:** Universal Validator (numeric, structural, semantic)  
+- **Tier 3:** Local Inference (TinyLlama)  
+
+✅ The system currently ensures all AI outputs are **audited, validated, and epistemically grounded**.
+
+---
+
+## 🏗️ System Architecture (8-Agent Roadmap)
+
+graph LR
+A[Data Sources: CDC, Public Health Open Data, etc.] –> B[Domain Adapter: Schema Mapping]
+B –> C[Inference Agent: TinyLlama / Local LLM]
+C –> D[Tarka Governance Layer: 3-Tier Audit]
+D –> E[Logic Agent: Statistical & Anomaly Detection]
+E –> F[Chanakya Layer: Strategic Synthesis]
+F –> G[ML Forecasting Agent: SARIMA / XGBoost]
+G –> H[Stakeholder Influence Agent: Kāma Sūtra-Inspired Behavioral Modeling (Phase 2)]
+H –> I[Decision Brief Generator / Dashboard Output]
+I –> J[Audit & Traceability Layer: Epistemic Tags]
+
+**Legend:**  
+- **Tier 0-3:** Core Neuro-Symbolic pipeline (Phase 1)  
+- **Agents E-F-G:** Strategic, logical, predictive reasoning  
+- **Agent H (Phase 2):** Behavioral modeling for human-in-the-loop influence and incentive alignment  
+
+---
+
+## 🎯 Phase 2: Stakeholder Influence Agent (Kāma Sūtra Layer)
+
+**Objective:** Add a human-behavior modeling dimension, simulating stakeholder incentives, hierarchies, and likely responses to strategic recommendations.
+
+**Key Functions:**  
+1. **Motivation Modeling (Vāsanā):** Maps desires and incentives of organizational actors.  
+2. **Timing & Opportunity Analysis (Samaya):** Suggests optimal intervention schedules based on data trends.  
+3. **Influence & Nudge Simulation (Pravṛtti):** Designs communication and resource deployment strategies to maximize compliance.  
+4. **Network Sensitivity (Sampradāya Awareness):** Identifies decision bottlenecks, hierarchy effects, and relational dynamics.  
+
+> Note: Phase 2 is **optional for the prototype**, intended for future expansion once the core 7 agents are stable.
+
+---
+
+## 🛠️ How Phase 2 Integrates
+
+- Operates **after Tarka Validation and Chanakya Synthesis**.  
+- Uses **audited summaries and ML forecasts** as inputs.  
+- Outputs **recommendations that factor in human incentives**, improving adoption feasibility.  
+- Fully modular: can be toggled off in initial deployment.
+
+---
+
+## 🧘 Architectural Philosophy
+
+- **Core Principle:** AI must first **“speak the truth”** (validated, deterministic), then **“advise strategically”** (Chanakya Layer), and finally **“influence effectively”** (Kāma Sūtra Layer).  
+- **Separation of Concerns:** Keeps numeric integrity, strategic reasoning, and behavioral modeling distinct.  
+- **Phase-Based Rollout:** Reduces complexity during early prototyping while preserving the roadmap for a full 8-agent OSIS.
+
+---
+
+📍 Maintainer: **@nvnmpudi-droid**  
+Infrastructure: GitHub Codespaces + Streamlit/Flask + Docker
+
+
+⸻
+
+This README now clearly:
+	1.	Marks Phase 2 for the behavioral agent (Kāma Sūtra-inspired).
+	2.	Shows it as the last agent in the 8-agent roadmap.
+	3.	Keeps the epistemic governance, Tarka, and Chanakya layers intact.
+	4.	Provides a modular, phased roadmap, so you don’t overcomplicate the prototype.
+
+If you want, I can also draw a fully labeled layered diagram showing Phase 1 vs Phase 2 flows with color-coded epistemic layers for GitHub integration. This would visually communicate which parts are live and which are future expansions.
+
+Do you want me to do that next?
 
 
 Perfect. Here’s a GitHub-ready Markdown snippet with the Mermaid diagram embedded and a concise legend, ready to drop into your README.md.
