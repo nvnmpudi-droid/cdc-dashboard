@@ -1,4 +1,153 @@
+Perfect. Here’s an updated, GitHub-ready README.md for your OSIS project that integrates the diagram, the 8-agent roadmap, and the Chanakya/Tarka/Neuro-Symbolic layers, written in Western scientific language with Nyāya/Tarka framing. You can paste this directly into your repository.
 
+⸻
+
+
+# 📘 OSIS – Organizational Strategy Intelligence System  
+**Current Build:** v1.0.1 (Neuro-Symbolic Prototype)  
+**Maintainer:** @nvnmpudi-droid  
+**Updated:** February 2026  
+
+---
+
+## 🧭 Executive Summary
+
+**OSIS** is a modular, multi-agent AI system designed to provide **strategic oversight for organizations** using a **Neuro-Symbolic architecture**.  
+The system integrates:
+
+- **Live structured data ingestion** (e.g., CDC mortality datasets as a test domain)  
+- **Local LLM inference** (TinyLlama)  
+- **Deterministic governance** via a **3-tier Tarka audit**  
+- **Strategic reasoning** inspired by **Chanakya**  
+- **Machine learning forecasting** (SARIMA / XGBoost)  
+- **Epistemic traceability** for every AI-generated output  
+
+> Think of OSIS as a “Governor” over probabilistic AI — it does not trust raw LLM output; it audits, validates, and then strategizes.
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    %% Phase 1 – Core Neuro-Symbolic Pipeline
+    subgraph Phase1["Phase 1 – Core Neuro-Symbolic Pipeline (Blue)"]
+        style Phase1 fill:#D6EAF8,stroke:#2980B9,stroke-width:2px,color:#154360
+        A[Data Sources: CDC, Open Health Data] --> B[Domain Adapter: Schema Mapping]
+        B --> C[Inference Agent: TinyLlama / Local LLM]
+        C --> D[Tarka Governance Layer: 3-Tier Audit]
+        D --> E[Logic Agent: Statistical & Anomaly Detection]
+        E --> F[Chanakya Layer: Strategic Synthesis]
+        F --> G[ML Forecasting Agent: SARIMA / XGBoost]
+    end
+
+    %% Phase 2 – Behavioral / Kāma Sūtra Layer
+    subgraph Phase2["Phase 2 – Behavioral / Kāma Sūtra Layer (Red)"]
+        style Phase2 fill:#FADBD8,stroke:#C0392B,stroke-width:2px,color:#78281F
+        G --> H[Stakeholder Influence Agent: Motivation, Timing, Nudge, Network Modeling]
+    end
+
+    %% Output & Audit Layer
+    H --> I[Decision Brief Generator / Dashboard Output]
+    I --> J[Audit & Traceability Layer: Epistemic Tags]
+
+    %% Node Styling
+    classDef blueLayer fill:#D6EAF8,stroke:#2980B9,stroke-width:1px,color:#154360;
+    classDef redLayer fill:#FADBD8,stroke:#C0392B,stroke-width:1px,color:#78281F;
+    classDef greenLayer fill:#D5F5E3,stroke:#27AE60,stroke-width:1px,color:#145A32;
+
+    class A,B,C,D,E,F,G blueLayer;
+    class H redLayer;
+    class I,J greenLayer;
+
+
+⸻
+
+✅ Key Principles
+
+Layer	Function	Nyāya/Tarka Equivalent
+Domain Adapter	Maps raw data to schema	Pratyakṣa (Direct Observation)
+Inference Agent	LLM generates natural language brief	Anumāna (Inference)
+Tarka Governance	3-tier audit: numeric, structural, semantic	Tarka (Dialectical Testing)
+Logic Agent	Statistical anomaly detection	Hetvābhāsa detection
+Chanakya Layer	Strategic synthesis and resource recommendation	Arthashastra-inspired advisory
+ML Forecasting	Predictive modeling	Pramāṇa-integrated inference
+Stakeholder Influence (Phase 2)	Behavioral modeling & nudge strategy	Kāma Sūtra-inspired influence patterns
+Audit & Traceability	Epistemic tagging & validation	Śabda (Authoritative Testimony)
+
+
+⸻
+
+🎯 8-Agent Roadmap
+
+Agent	Objective	Current Status
+1. Data Adapter	Ingest and map domain datasets	✅ Live, CDC test data
+2. Inference Agent	LLM-generated brief	✅ TinyLlama functional
+3. Tarka Validator	Numeric, structural, semantic audit	✅ Operational
+4. Logic Agent	Detect anomalies, outliers	⏳ Planned
+5. Chanakya Layer	Strategic recommendations	⏳ Planned
+6. ML Forecast Agent	Trend prediction & forecasting	⏳ Planned
+7. Stakeholder Influence Agent	Behavioral modeling, nudges	⏳ Phase 2
+8. Decision & Audit Output	Epistemic brief & dashboard	✅ Live
+
+
+⸻
+
+💾 Data Management
+	•	Currently in-memory using Pandas DataFrames
+	•	Future step: DuckDB/PostgreSQL database for multi-domain historical datasets
+	•	Schema-agnostic design allows cross-domain scaling (finance, operations, healthcare)
+	•	Each dataset is versioned and tied to its epistemic schema
+
+⸻
+
+⚙️ How to Run
+
+# 1. Start local TinyLlama LLM
+ollama run tinyllama
+
+# 2. Launch the Epistemic Dashboard
+streamlit run app.py
+
+
+⸻
+
+📆 Recommended Timeline (6 Weeks)
+
+Phase	Week	Deliverables
+1	ETL & Adapter	CDC + other open datasets; schema mapping
+2	Logic Agent	Statistical anomaly detection
+3	Chanakya Layer	Strategic synthesis engine
+4	ML Forecasting	SARIMA / XGBoost models
+5	Phase 2 Behavioral Layer	Influence, nudge & stakeholder agent
+6	Dashboard & Audit	Streamlit deployment, epistemic tagging
+
+
+⸻
+
+🔍 Public Health & Enterprise Value
+	•	Provides auditable, traceable AI output for strategic decision-making
+	•	Integrates classical Indian epistemology into modern AI governance
+	•	Serves as a blueprint for multi-domain enterprise intelligence systems
+	•	Can later scale to personal assistant or cross-domain enterprise use
+
+⸻
+
+📚 References
+	1.	CDC NVSS Mortality Data￼
+	2.	Forecast Hub Ensemble Forecasts￼
+	3.	NIH Dashboard Design Principles￼
+
+⸻
+
+📍 Maintainer: @nvnmpudi-droid
+Infrastructure: GitHub Codespaces + Streamlit Cloud + Docker
+
+---
+
+If you want, I can **also generate a “Phase 1 vs Phase 2 roadmap diagram” as a PNG/SVG with colored layers and labeled agents** that you can embed directly in GitHub for maximum clarity.  
+
+Do you want me to do that next?
 Perfect. Here’s an updated, GitHub-ready README.md for your OSIS project that integrates the diagram, the 8-agent roadmap, and the Chanakya/Tarka/Neuro-Symbolic layers, written in Western scientific language with Nyāya/Tarka framing. You can paste this directly into your repository.
 
 ⸻
