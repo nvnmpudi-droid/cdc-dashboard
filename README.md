@@ -1,3 +1,157 @@
+
+Absolutely. Let’s integrate the Logic Agent into your OSIS architecture and fully reflect the Chanakya Layer + 8-agent roadmap, while keeping the README architect-level, domain-agnostic, and epistemically rigorous. Here’s the updated version:
+
+⸻
+
+
+# 📘 OSIS: Organizational Strategy Intelligence System  
+**Version 1.1 | Neuro-Symbolic Prototype | February 2026**
+
+---
+
+## 🧭 Executive Summary
+
+**OSIS** is a modular, multi-agent AI system for **organizational decision intelligence**, combining:
+
+- **Deterministic governance** (Python-based validation)  
+- **Probabilistic natural-language inference** (TinyLlama & larger LLMs)  
+- **Strategic reasoning** (Chanakya Layer)  
+- **Epistemic rigor** (3-Tier Tarka Validation Engine)
+
+The system currently uses CDC Mortality data as a **domain-agnostic test case** to prove the architecture. The goal is to evolve OSIS into a **multi-domain advisory system**, capable of generating **auditable, actionable, and strategic insights** for organizations.
+
+---
+
+## ✅ Completed Milestones
+
+- **Tier 0 – Data Ingestion:** Operational CDC ETL pipeline  
+- **Tier 1 – Domain Adapter:** Schema-driven mapping of raw data → canonical structure  
+- **Tier 2 – Universal Validator:** 3-Tier deterministic audit (Pratyakṣa, Vyākaraṇa, Anumāna) catching AI hallucinations  
+- **Tier 3 – Local Inference:** Integrated TinyLlama for high-privacy, local execution
+
+---
+
+## 🏗️ Current System Architecture
+
+graph LR
+A[Raw Data / CSV / API] –> B[Domain Adapter: Schema Mapping]
+B –> C[Logic Agent: Anomaly & Gap Detection]
+C –> D[Inference Layer: TinyLlama Brief Generation]
+D –> E[Tarka Governance Layer: 3-Tier Validation]
+E –> F[Chanakya Layer: Strategic Advisory Synthesis]
+F –> G[Multi-Agent Orchestration (8 Agents)]
+G –> H[Decision Brief Generator / Audit Layer]
+H –> I[Web Interface / API for End-Users]
+
+### Key Layers Explained
+
+1. **Domain Adapter:** Converts any structured dataset into a canonical schema; enables cross-domain capability.  
+2. **Logic Agent:** Detects statistical anomalies, outliers, and gaps before the AI generates summaries; preemptively flags data quirks.  
+3. **Inference Layer (TinyLlama):** Generates natural-language summaries constrained by deterministic data validation.  
+4. **Tarka Governance Layer:**  
+   - **Tier 1:** Numeric verification  
+   - **Tier 2:** Structural validation (regex / templates)  
+   - **Tier 3:** Semantic verification (numbers vs. source)  
+5. **Chanakya Layer:** Produces strategic recommendations based on validated summaries, e.g., resource pivoting or risk mitigation strategies.  
+6. **Multi-Agent Orchestration:** Future 8-agent system including Logic, Risk, Strategy, Forecast, Compliance, Ethics, Resource, and Audit Agents.  
+7. **Audit Layer:** All outputs tagged with **epistemic provenance** and traceable validation chains.
+
+---
+
+## 🎯 Objectives (Domain-Agnostic)
+
+| Layer | Goal | Outcome |
+|-------|------|---------|
+| Data Ingestion | ETL pipelines & schema mapping | Clean, versioned structured datasets |
+| Logic Agent | Detect anomalies, gaps, and outliers | Contextualized data for reliable inference |
+| Inference Layer | AI-generated brief constrained by schema | Natural-language summaries with deterministic grounding |
+| Tarka Governance | 3-tier numeric/structural/semantic validation | Eliminate hallucinations and false claims |
+| Chanakya Layer | Strategic advisory | Actionable insights based on data trends |
+| Multi-Agent Orchestration | Integrate specialized agents | Cross-domain reasoning & domain-specific specialization |
+| Audit Layer | Epistemic tagging | Full transparency, traceability, and reproducibility |
+
+---
+
+## 🧩 Data Sources (Current Test Case)
+
+| Dataset | Purpose | Use |
+|---------|--------|-----|
+| CDC NVSS Mortality Data | Weekly counts by state/demographics | Trend analysis, Tarka validation |
+| Multiple Cause of Death (MCD) | ICD-10 coded death records | Classification, risk analysis |
+| Forecast Hub Ensemble | Benchmark for predictive accuracy | Model validation & cross-checking |
+| PLACES Community Health | Social determinants & risk factors | Contextual clustering, anomaly detection |
+
+> **Note:** Domain adapter allows future non-health datasets to be integrated seamlessly.
+
+---
+
+## ⚙️ How to Run (Local Prototype)
+
+```bash
+# 1. Start TinyLlama with Ollama
+ollama run tinyllama
+
+# 2. Launch Epistemic Dashboard
+streamlit run app.py
+
+Architectural Note
+	•	Logic Agent = Prefrontal Cortex: Detects reporting gaps, spikes, or anomalies.
+	•	Tarka Layer = Brainstem: Ensures numbers and logic do not lie.
+	•	Chanakya Layer = Strategic Cortex: Generates actionable organizational guidance.
+	•	Future 8-Agent Orchestration = Full Executive Suite: Integrates specialized reasoning, risk, strategy, compliance, and audit agents.
+
+⸻
+
+📆 Roadmap: Next 8-Agent Phase
+
+Week	Agent	Objective
+2	Logic Agent	Statistical anomaly detection; pre-summary critique
+3	Chanakya Layer	Strategic advisory synthesis
+4	Risk Agent	Identify organizational exposure & vulnerabilities
+5	Forecast Agent	Scenario modeling & probabilistic simulations
+6	Compliance Agent	Evaluate regulatory/ethical alignment
+7	Resource Agent	Suggest optimal allocation of organizational resources
+8	Audit & Ethics Agents	Cross-agent audit & epistemic traceability; final validation
+
+
+⸻
+
+💡 Key Advantages
+	•	Cross-domain scalability: Schema-driven adapter + agent layering enables use in marketing, finance, logistics, or healthcare.
+	•	Neuro-symbolic approach: Probabilistic LLM outputs governed by deterministic Python validation.
+	•	Strategic reasoning: Chanakya Layer transforms data summaries into actionable organizational advice.
+	•	Epistemic transparency: 3-Tier Tarka governance ensures all outputs are auditable and defensible.
+	•	Open-source feasible: Python, DuckDB/PostgreSQL, Docker, Streamlit/Flask, TinyLlama + RAG tools.
+
+⸻
+
+🔍 References
+	1.	CDC NVSS Mortality Data￼
+	2.	CDC Multiple Cause of Death￼
+	3.	Forecast Hub Ensemble Forecasts￼
+	4.	PLACES Community Health Indicators￼
+
+⸻
+
+📍 Maintainer: @nvnmpudi-droid
+Infrastructure: GitHub Codespaces + Docker + Streamlit/Flask
+
+---
+
+This **README v1.1** now:
+
+1. Adds the **Logic Agent** as pre-summary data critic.  
+2. Explicitly integrates the **Chanakya Layer** for strategic recommendations.  
+3. Maps out the **8-agent roadmap** for multi-domain organizational intelligence.  
+4. Preserves **neuro-symbolic / epistemic validation**, making the system auditable and cross-domain ready.  
+
+---
+
+If you want, I can **also produce a visual architecture diagram** showing **Logic → Tarka → Chanakya → Multi-Agent orchestration → Audit**, optimized for **GitHub README embedding**.  
+
+Do you want me to do that next?
+
+
 Absolutely. Let’s do a fully **architect-level README** that communicates your project in **Western scientific and philosophical language**, while preserving the **Nyāya/Tarka epistemic rigor**—reframed for institutional, engineering, and AI audiences. I’ll also propose an updated architecture with explicit reasoning layers.
 
 ---
