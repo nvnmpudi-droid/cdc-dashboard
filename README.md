@@ -1,4 +1,141 @@
+Absolutely. Here’s an updated README that integrates the 8-agent OSIS architecture, adds Arthashastra strategic overlays, and includes the Mermaid diagram for GitHub README rendering.
 
+⸻
+
+
+# 📘 OSIS: Organizational Strategy Intelligence System
+**Current Build:** v1.0.2 (Neuro-Symbolic Prototype with Chanakya Layer)  
+**Updated:** February 2026
+
+---
+
+## 🧭 Executive Summary
+
+**OSIS** is a modular, agentic AI system for **organizational intelligence**. It combines **neuro-symbolic AI**, **multi-agent reasoning**, and **epistemic auditing** to produce **validated, actionable intelligence** from structured enterprise data.  
+
+Key principles:  
+- **Neuro-symbolic architecture:** AI outputs (probabilistic) are submitted to deterministic logic layers (Tarka) before any strategic reasoning.  
+- **Multi-layered governance:** Numeric, structural, and semantic checks ensure output fidelity.  
+- **Strategic oversight:** The Chanakya Layer interprets validated data using **Arthashastra-inspired heuristics** (Danda, Ayana, Hitam/Ahitam).  
+- **Dialectical reasoning:** Vāda/Jalpa agents stress-test strategy and detect contradictions.  
+- **Traceable decisions:** Every output is tagged with its epistemic source.
+
+---
+
+## 🎯 Objectives
+
+| Layer / Agent | Goal | Outcome |
+|---------------|------|---------|
+| **Data Ingestion & Domain Adapter** | Map raw CSV/JSON/API to structured schema | Unified, clean, versioned data |
+| **Database Layer** | Persist enterprise datasets | Support historical tracking and cross-domain analysis |
+| **Logic Agent** | Detect anomalies, reporting gaps, outliers | Higher fidelity input for AI |
+| **Inference Layer** | Generate natural language summaries from data | Human-readable briefings |
+| **Tarka Layer** | Numeric / Structural / Semantic validation | AI hallucinations are caught before output |
+| **Chanakya Layer** | Strategic reasoning over validated outputs | Actionable organizational recommendations |
+| **Dialectical Agent** | Apply Vāda / Jalpa counterfactuals | Stress-test strategy, reduce blind spots |
+| **RAG Knowledge Retrieval & Audit** | Provide authoritative support and tagging | Traceable, explainable intelligence |
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+%% Data Layer
+A[Raw Data Sources] --> B[Data Ingestion & Domain Adapter]
+B --> C[Database Storage Layer]
+C --> D[Logic Agent: Anomaly Detection]
+
+%% Inference Layer
+D --> E[Inference Layer (TinyLlama)]
+E --> F[Tarka Layer: Numeric / Structural / Semantic Audit]
+
+%% Strategic Layer
+F --> G[Chanakya Layer: Strategic Oversight]
+G --> H[Dialectical Agent: Vāda / Jalpa Counterfactuals]
+
+%% Knowledge Layer
+H --> I[RAG Knowledge Retrieval: Authoritative Sources]
+I --> J[Audit & Traceability Layer]
+
+%% Arthashastra overlays
+classDef arth color:#ffffff,fill:#2e7d32,stroke:#ffffff,stroke-width:1px;
+class B,C,D,E,F,G,H,I,J arth;
+
+%% Overlay labels
+B:::arth -->|Saṃgraha: Intelligence / Surveillance| B
+D:::arth -->|Gudhapurusha: Detect anomalies| D
+E:::arth -->|Hitam / Ahitam: Trend vs anomaly| E
+F:::arth -->|Information Hygiene: Validate outputs| F
+G:::arth -->|Danda: Resource allocation / strategy| G
+H:::arth -->|Ayana / Yojana: Risk / scenario planning| H
+I:::arth -->|Śabda: Authoritative counsel| I
+J:::arth -->|Hitam / Ahitam: Audit & epistemic grounding| J
+
+
+⸻
+
+📂 Data Sources & Storage
+	•	Database Layer: DuckDB / PostgreSQL to store all enterprise datasets.
+	•	Schema-Agnostic Adapter: Allows cross-domain ingestion (healthcare, finance, logistics).
+	•	Historical Tracking: Enterprise teams must preload legacy data for longitudinal analyses.
+	•	Real-Time Cache: Streamlit + Pandas memory layer for fast prototyping.
+
+⸻
+
+🔹 Epistemic Principles
+
+Principle	AI Layer	Role
+Pratyakṣa (Direct Observation)	Data Ingestion / Logic Agent	Structured raw data integrity
+Anumāna (Inference)	TinyLlama	Probabilistic summarization
+Śabda (Authoritative Testimony)	RAG Layer	Documentation-backed claims
+Tarka (Dialectical Testing)	Tarka Layer + Dialectical Agent	Counterfactual / stress-test validation
+Hetvābhāsa Detection	Tarka Layer	Detects contradictions or spurious reasoning
+Arthashastra Overlays	Chanakya Layer	Strategic evaluation and resource allocation
+
+
+⸻
+
+⚙️ Running OSIS
+
+# 1. Start the local TinyLlama model
+ollama run tinyllama
+
+# 2. Launch the Streamlit dashboard
+streamlit run app.py
+
+
+⸻
+
+🚀 Next Steps
+	1.	Expand Schema-Agnostic Adapter for enterprise-wide datasets.
+	2.	Build additional agents: Risk, Compliance, Finance, Marketing, etc.
+	3.	Integrate multi-model orchestration (TinyLlama + Phi-3 / Gemma) for nuanced strategic reasoning.
+	4.	Persist data into the Database Layer for historical queries and cross-domain analysis.
+	5.	Extend Chanakya Layer with more Arthashastra heuristics for predictive resource allocation.
+
+⸻
+
+📍 Maintainer
+
+@nvnmpudi-droid – GitHub Codespaces + Docker + Streamlit + DuckDB/PostgreSQL
+
+⸻
+
+
+This **README now reflects**:
+
+- The 8-agent architecture
+- Chanakya Layer with Arthashastra overlays
+- Tarka validation principles
+- Schema-agnostic, enterprise-ready design
+- Mermaid diagram for GitHub
+
+---
+
+If you want, I can **also generate a “Phase 2 personal assistant” extension section** in the README that maps this enterprise OSIS into a **user-facing AI assistant**, showing how the same 8-agent architecture can scale to individual use.  
+
+Do you want me to add that?
 Absolutely. Here’s an updated README.md that incorporates the database setup, enterprise historical data requirements, and explains how OSIS becomes schema-agnostic and enterprise-ready.
 
 ⸻
