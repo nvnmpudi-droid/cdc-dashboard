@@ -1,4 +1,78 @@
 
+
+
+Perfect. Here’s a GitHub-ready Markdown snippet with the Mermaid diagram embedded and a concise legend, ready to drop into your README.md.
+
+## 🏗️ OSIS / Chanakya-Agent Architecture
+
+```mermaid
+graph TD
+%% DATA INGESTION
+A[Raw Data Sources: CDC, Hospital, Finance, Marketing, IoT] --> B[Data Ingestion & Versioning (ETL / API)]
+
+%% HISTORICAL STORAGE
+B --> C[Historical Data Storage (DuckDB/Postgres)]
+C --> D[Feature Engineering Layer]
+D --> E[Model Selector / Meta-Agent]
+
+%% ML & PREDICTION
+E --> F[ML Models: SARIMA / XGBoost / Classification / Regression]
+F --> G[Structured Inference Layer (Logic Agent)]
+
+%% RAG & KNOWLEDGE
+G --> H[Dialectical Stress-Test Agents (Vāda / Jalpa / Vitanda)]
+H --> I[RAG Knowledge Retrieval (Documentation / Guidelines)]
+I --> J[Chanakya Layer (Strategic Oversight & Resource Allocation)]
+
+%% VALIDATION & AUDIT
+J --> K[Universal Governance / Tarka Layer (Pratyakṣa / Vyākaraṇa / Anumāna)]
+K --> L[Epistemic Audit Dashboard & UI]
+
+%% SYSTEM HEALTH
+C --> M[System Health Monitor (Samkhya + Ayurvedic Metrics)]
+M --> K
+
+%% PERSONAL ASSISTANT PHASE 2
+L --> N[Optional: Personal Assistant Interface]
+
+%% NOTES
+classDef data fill:#D5E8D4,stroke:#82B366,color:#000;
+classDef model fill:#FFF2CC,stroke:#D6B656,color:#000;
+classDef logic fill:#F8CECC,stroke:#B85450,color:#000;
+classDef audit fill:#E1D5E7,stroke:#9673A6,color:#000;
+classDef ui fill:#DAE8FC,stroke:#6C8EBF,color:#000;
+
+class A,B,C,D,E data;
+class F model;
+class G,H,I,J logic;
+class K audit;
+class L,N ui;
+class M data;
+
+📝 Legend
+
+Layer	Purpose
+Raw Data Sources	CDC open data, hospital EMR extracts, finance, marketing, IoT logs
+Data Ingestion & Versioning	ETL + caching + schema mapping
+Historical Data Storage	DuckDB/Postgres for cross-time analysis and audits
+Feature Engineering	Normalization, encoding, aggregation, domain-specific transformations
+Model Selector / Meta-Agent	Chooses ML model based on dataset and query type
+ML Models	SARIMA, XGBoost, Regression, Classification, Clustering
+Structured Inference / Logic Agent	Converts model outputs to syllogistic propositions
+Dialectical Stress-Test Agents	Vāda, Jalpa, Vitanda – generate counterfactuals and alternative reasoning
+RAG Knowledge Retrieval	Retrieve authoritative documentation and guidelines
+Chanakya Layer	Strategic oversight, resource allocation, decision prioritization
+Universal Governance / Tarka Layer	3-tier deterministic validation: numeric, structural, semantic
+Epistemic Audit Dashboard & UI	Visual interface, flags AI hallucinations, shows reasoning provenance
+System Health Monitor	Samkhya + Ayurvedic metrics: detects drift, imbalance, or stale data
+Personal Assistant Interface	Optional Phase 2: domain-agnostic AI assistant for users
+
+
+⸻
+
+This Markdown snippet renders beautifully on GitHub, showing both the architecture and flow, while keeping your Nyāya/Tarka + Chanakya-inspired audit and strategic reasoning front and center.
+
+If you want, I can also create a simplified “one-page README” that merges this diagram, legend, and your previous executive summary so it looks professional for external audiences. Do you want me to do that next?
 Perfect. Here’s a fully updated OSIS / Chanakya-Agent architecture diagram showing all current layers plus the next strategic additions. I’ve labeled it so it’s ready to drop into your README.
 
 graph TD
