@@ -74,8 +74,26 @@ with col_right:
 st.markdown("---")
 
 # ── AI Summary ────────────────────────────────────────
-st.subheader("🤖 AI Narrative Summary")
-st.code(narrative, language=None)
+st.subheader("🤖 AI Narrative Summary (Epistemic Audit)")
+
+# Parse the narrative to separate the Story from the Validation
+if "[VALIDATION STATUS:" in narrative:
+    story_part, validation_part = narrative.split("[VALIDATION STATUS:", 1)
+    validation_status = validation_part.replace("]", "").strip()
+else:
+    story_part = narrative
+    validation_status = "UNKNOWN"
+
+# Display the Story
+st.write(story_part)
+
+# Display the Audit Badge
+if "VALIDATED" in validation_status and "CONTRADICTION" not in validation_status:
+    st.success(f"✅ AUDIT PASSED: {validation_status}")
+elif "CONTRADICTION" in validation_status:
+    st.error(f"❌ AUDIT FAILED: {validation_status}")
+else:
+    st.warning(f"⚠️ AUDIT UNCERTAIN: {validation_status}")
 
 # ── Raw data ──────────────────────────────────────────
 with st.expander("📄 View Raw Data"):
