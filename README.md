@@ -1,3 +1,163 @@
+Perfect. Here’s a visual 8-Agent OSIS roadmap diagram that you can embed in your README. It shows how each agent interacts in the system, including the Tarka audit, Chanakya strategic layer, and Sankhya/Ayurveda system health layer.
+
+graph TD
+    %% Data Ingestion
+    A[Raw Data: CDC, Hospital, Finance, Orders] --> B[Domain Adapter: Schema Mapping]
+
+    %% Logic & Risk Agents
+    B --> C[Logic Agent: Detect anomalies & gaps]
+    B --> D[Risk Agent: Quantify uncertainties & outliers]
+
+    %% Inference Layer
+    C --> E[TinyLlama: Natural Language Summary]
+    D --> E
+
+    %% Tarka Audit Layer
+    E --> F[Tarka Agent: Deterministic Validation (Numeric, Structural, Semantic)]
+    
+    %% Strategic Oversight
+    F --> G[Chanakya Layer: Strategic Recommendations & Resource Guidance]
+
+    %% Vada/Jalpa Debate Agents
+    G --> H[Vada Agent: Constructive debate / alternative interpretations]
+    G --> I[Jalpa Agent: Contrarian stress-testing of assumptions]
+
+    %% Sankhya + Ayurveda System Health
+    B --> J[Sankhya/Ayurveda Agent: Evaluate system wellness (Dosha metrics, Guṇa balance)]
+    C --> J
+    D --> J
+    F --> J
+    G --> J
+    H --> J
+    I --> J
+
+    %% Dashboard / Output
+    J --> K[Dashboard/API: Decision support interface, alerts, wellness indicators]
+
+Explanation of Interactions:
+	1.	Domain Adapter standardizes data for all agents.
+	2.	Logic Agent spots anomalies before summary generation.
+	3.	Risk Agent quantifies uncertainty and highlights potential reporting errors.
+	4.	TinyLlama produces human-readable summaries constrained by schemas.
+	5.	Tarka Agent validates AI outputs against deterministic rules.
+	6.	Chanakya Layer converts validated summaries into strategic insights.
+	7.	Vada & Jalpa Agents provide dialectical testing—alternative hypotheses and stress-testing assumptions.
+	8.	Sankhya/Ayurveda Agent monitors system “health,” indicating over/under stress or imbalance in processing, variability, and storage.
+	9.	Dashboard/API exposes actionable intelligence and wellness indices to end-users.
+
+⸻
+
+If you want, I can also produce a compact, single-page README diagram combining this 8-agent roadmap with the data-to-insight workflow arrows so it’s visually ready for GitHub.
+
+Do you want me to do that next?
+
+
+
+Perfect. Here’s an updated README snippet for your OSIS project, integrating the Tarka, Chanakya, and Sankhya/Ayurveda layers along with the diagram. You can paste this directly into your README.md.
+
+⸻
+
+
+# 📘 OSIS: Organizational Strategy Intelligence System  
+**Version 1.1 | Updated February 2026**  
+
+---
+
+## 🧭 Executive Summary
+
+**OSIS** is a **multi-agent, neuro-symbolic AI platform** designed for **enterprise decision intelligence**.  
+It combines:
+
+- **Data ingestion** from open and proprietary datasets (CDC, hospital records, immunization, orders)  
+- **Neuro-symbolic reasoning** (TinyLlama + deterministic Tarka validation)  
+- **Strategic oversight** (Chanakya Layer)  
+- **System health monitoring** (Sankhya + Ayurvedic metrics)  
+
+OSIS ensures **auditable, reproducible insights** while providing **strategic guidance** and **system wellness evaluation**.
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    %% Data Ingestion
+    A[Open Datasets: CDC, Hospital, Immunization, Orders] --> B[Domain Adapter: Schema Mapping]
+    
+    %% Inference Layer
+    B --> C[TinyLlama / Local LLM: Natural Language Summary]
+    
+    %% Tarka Audit Layer
+    C --> D[Tarka Layer: 3-Tier Deterministic Validator]
+    D --> E[Validated Summary]
+    
+    %% Chanakya Layer: Strategic Oversight
+    E --> F[Chanakya Layer: Strategic Recommendations / Resource Allocation]
+    
+    %% Sankhya + Ayurveda Health Monitoring
+    B --> G[Sankhya Guṇa Monitor: Sattva, Rajas, Tamas]
+    C --> G
+    D --> G
+    F --> G
+    G --> H[System Wellness Index: Dosha Metrics (Vata, Pitta, Kapha)]
+    
+    %% Output / Dashboard
+    H --> I[Dashboard / API / Decision Support Interface]
+
+
+⸻
+
+🧩 Layer Descriptions
+
+Layer	Function	Key Features
+Domain Adapter	Maps raw datasets into unified schemas	CDC_SCHEMA, FINANCE_SCHEMA, HOSPITAL_SCHEMA etc.; prepares for cross-domain processing
+Inference Layer	Generates natural language summaries	TinyLlama LLM with few-shot prompts; outputs pass schema constraints
+Tarka Layer	Deterministic validation of AI output	Numeric check, structural regex check, semantic comparison with source data
+Chanakya Layer	Strategic oversight & resource guidance	Analyzes validated summaries; produces recommendations based on trends, risk, and organizational objectives
+Sankhya + Ayurveda Monitoring	System wellness evaluation	Sattva/Rajas/Tamas for clarity/activity/inertia; Doshas (Vata/Pitta/Kapha) for variability/processing/storage; produces a System Wellness Index
+Dashboard / API	Visualizes insights & alerts	Streamlit/Flask interface; color-coded validation; wellness index for executives
+
+
+⸻
+
+⚙️ Workflow Summary
+	1.	Data Ingestion: Pull data from open sources or enterprise DB; cache in-memory or persist via DuckDB/PostgreSQL.
+	2.	Schema Mapping: Convert datasets into structured, domain-agnostic schema representations.
+	3.	Inference: TinyLlama produces human-readable summaries.
+	4.	Tarka Audit: Three-tier deterministic validation ensures accuracy, completeness, and semantic correctness.
+	5.	Chanakya Analysis: Generates strategic recommendations from validated insights.
+	6.	System Health Monitoring: Evaluates organizational AI workflow with Sankhya/Ayurveda metrics.
+	7.	Output: Streamlit/Flask dashboard exposes actionable intelligence with audit indicators.
+
+⸻
+
+💡 Strategic Advantages
+	•	Neuro-symbolic AI: LLM output is constrained by deterministic governance.
+	•	Cross-domain readiness: Schema-agnostic adapters allow finance, healthcare, or marketing datasets to plug in.
+	•	Strategic insight: Chanakya Layer converts data into actionable organizational decisions.
+	•	System resilience: Sankhya/Ayurveda metrics monitor workflow health, variability, and resource load.
+	•	Auditability & explainability: Every summary is validated, traceable, and backed by structured data.
+
+⸻
+
+🔮 Next Steps
+	•	Expand Chanakya Layer with multi-model orchestration for nuanced strategic reasoning.
+	•	Persist all datasets in DuckDB/PostgreSQL to support historical trend analysis.
+	•	Modularize schemas for multi-domain integration.
+	•	Extend Tarka Layer with vitanda (contrarian testing) and vada-jalpa (debate simulation) agents.
+
+⸻
+
+Maintainer: @nvnmpudi-droid
+Infrastructure: GitHub Codespaces + Docker + Streamlit/Flask
+
+---
+
+I can **also create a visual “8-Agent OSIS roadmap”** that shows all agents (Logic, Risk, Strategy, Chanakya, Vada, Vitanda, Sankhya/Ayurveda, Tarka) and their interactions.  
+
+Do you want me to generate that next?
+
+
 Absolutely. Here’s an updated README that integrates the 8-agent OSIS architecture, adds Arthashastra strategic overlays, and includes the Mermaid diagram for GitHub README rendering.
 
 ⸻
