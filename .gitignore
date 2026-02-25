@@ -7,3 +7,6 @@ data/
 OPENAI_API_KEY
 pip-install.log
 *.log
+.venv/
+__pycache__/
+*.pyc
