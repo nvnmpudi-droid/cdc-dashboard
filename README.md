@@ -1,3 +1,60 @@
+
+Perfect. I’ve created a layered diagram for OSIS showing Phase 1 (core prototype) vs Phase 2 (behavioral/Kāma Sūtra layer) with color-coded epistemic flows. This is ready for GitHub README integration.
+
+⸻
+
+
+%% OSIS 8-Agent Layered Architecture
+graph TD
+    style Phase1 fill:#D6EAF8,stroke:#2980B9,stroke-width:2px
+    style Phase2 fill:#FADBD8,stroke:#C0392B,stroke-width:2px
+
+    subgraph Phase1["Phase 1 – Core Neuro-Symbolic Pipeline (Blue)"]
+        A[Data Sources: CDC, Open Health Data] --> B[Domain Adapter: Schema Mapping]
+        B --> C[Inference Agent: TinyLlama / Local LLM]
+        C --> D[Tarka Governance Layer: 3-Tier Audit]
+        D --> E[Logic Agent: Statistical & Anomaly Detection]
+        E --> F[Chanakya Layer: Strategic Synthesis]
+        F --> G[ML Forecasting Agent: SARIMA / XGBoost]
+    end
+
+    subgraph Phase2["Phase 2 – Behavioral / Kāma Sūtra Layer (Red)"]
+        G --> H[Stakeholder Influence Agent: Motivation, Timing, Nudge, Network Modeling]
+    end
+
+    H --> I[Decision Brief Generator / Dashboard Output]
+    I --> J[Audit & Traceability Layer: Epistemic Tags]
+
+    %% Styling nodes
+    classDef blueLayer fill:#D6EAF8,stroke:#2980B9,stroke-width:1px,color:#154360;
+    classDef redLayer fill:#FADBD8,stroke:#C0392B,stroke-width:1px,color:#78281F;
+    class A,B,C,D,E,F,G blueLayer;
+    class H redLayer;
+    class I,J fill:#D5F5E3,stroke:#27AE60,stroke-width:1px,color:#145A32;
+
+
+⸻
+
+✅ Diagram Highlights
+	1.	Blue Layer – Phase 1:
+	•	Fully operational prototype.
+	•	Includes Data Ingestion, Schema Mapping, LLM Inference, Tarka Audit, Logic Agent, Chanakya Layer, and ML Forecasting.
+	2.	Red Layer – Phase 2:
+	•	Optional future expansion.
+	•	Introduces the Kāma Sūtra-inspired Stakeholder Influence Agent for human-behavior modeling and adoption strategy.
+	3.	Green Layer – Output & Audit:
+	•	Decision Brief Generator and Epistemic Audit Layer.
+	•	Ensures every output remains validated, traceable, and actionable.
+
+⸻
+
+This diagram makes it visually clear which agents are live vs. planned. It also reinforces the phase-based rollout strategy and epistemic separation of concerns.
+
+I can also convert this into a GitHub-ready SVG with annotations for Phase 1 vs Phase 2, so it can sit at the top of your README.
+
+Do you want me to do that next?
+
+
 Perfect. Here’s an updated README snippet for OSIS with the Kāma Sūtra-inspired Stakeholder Influence Agent included as a Phase 2 / last-phase layer in the 8-agent architecture. I’ve integrated it in Western scientific language, while keeping the epistemic rigor and phased rollout clear.
 
 ⸻
