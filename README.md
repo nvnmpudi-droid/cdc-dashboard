@@ -1,5 +1,137 @@
 
+Absolutely. Here’s an updated README.md that incorporates the database setup, enterprise historical data requirements, and explains how OSIS becomes schema-agnostic and enterprise-ready.
 
+⸻
+
+
+# 📘 OSIS: Organizational Strategy Intelligence System  
+**Current Build:** v1.0.2 (Neuro-Symbolic Prototype + Enterprise DB Ready)  
+**Updated:** February 2026  
+
+---
+
+## 🧭 Executive Summary
+
+**OSIS** is a modular, agentic AI system designed for **organizational strategic intelligence**.  
+It integrates **data ingestion**, **probabilistic inference**, **deterministic governance (Tarka layer)**, and **strategic reasoning (Chanakya Layer)** to generate auditable, policy-ready insights.  
+
+Key principles:  
+- **Neuro-symbolic approach:** probabilistic AI submits outputs to deterministic logic audits.  
+- **Schema-agnostic architecture:** separates domain knowledge (schema) from inference logic.  
+- **Enterprise-readiness:** supports multi-dataset, historical, and cross-domain analysis via a central database.  
+
+---
+
+## 🎯 Objectives
+
+| Category | Goal | Outcome |
+|----------|------|--------|
+| **Data Ingestion** | ETL from APIs, CSVs, Excel, or DB tables | Centralized, versioned datasets |
+| **Forecasting & Analytics** | Machine learning for trend detection and anomaly identification | Quantitative projections with audit trails |
+| **Tarka / Validation Layer** | 3-tier deterministic audit (numeric, structural, semantic) | Zero tolerance for hallucinated AI outputs |
+| **Logic Agent** | Detect anomalies, gaps, or outliers in historical and current data | Early warning for data integrity issues |
+| **Chanakya Layer** | Strategic recommendations based on validated data | Organizational decision support |
+| **Database Layer** | Store historical + current data | Supports multi-domain and schema-agnostic scaling |
+
+---
+
+## 🏗️ System Architecture
+
+graph LR
+A[Enterprise Databases / CSVs / APIs] –> B[Data Ingestion & Adapter Layer]
+B –> C[Central Database: DuckDB/PostgreSQL/Enterprise EDW]
+C –> D[Inference Layer: TinyLlama]
+D –> E[Tarka Governance Layer]
+E –> F[Logic Agent: Anomaly & Gap Detection]
+F –> G[Chanakya Layer: Strategic Recommendations]
+G –> H[Dashboard / API Output]
+H –> I[Audit & Traceability Logging]
+
+### Design Rationale
+
+1. **Database-Centric Architecture**  
+   - Historical and live datasets are **stored centrally** for reproducibility, cross-domain access, and auditability.  
+   - Metadata registry allows **schema-agnostic mapping** to any organizational dataset.  
+
+2. **Schema-Agnostic Adapter Layer**  
+   - Each dataset registers a schema dynamically (fields, types, validation regex).  
+   - Supports CSVs, Excel, APIs, or DB tables.  
+   - Allows multiple organizational datasets (immunizations, orders, admissions) to feed into the AI pipeline **without hardcoding logic**.  
+
+3. **Neuro-Symbolic Governance (Tarka Layer)**  
+   - Numeric Check: validates exact numbers from the source.  
+   - Structural Check: ensures AI output matches template.  
+   - Semantic Check: cross-validates extracted values against source data.  
+
+4. **Logic Agent**  
+   - Scans datasets for **anomalies, reporting gaps, or outliers** before AI summarization.  
+   - Moves the system from passive reporting to proactive critique.  
+
+5. **Chanakya Layer (Strategic AI)**  
+   - Receives validated summaries and generates **actionable organizational recommendations**.  
+   - Supports multi-domain applications (public health, finance, marketing).  
+
+---
+
+## 🧩 Enterprise DB Requirements
+
+- **Database Choice:** DuckDB (prototype), PostgreSQL (departmental), Caboodle / Snowflake / Redshift (enterprise).  
+- **Historical + Current Data:** Load all relevant datasets (e.g., mortality, immunizations, orders, admissions).  
+- **Metadata Registry:** Tracks schema, field types, validation rules, and source.  
+- **ETL Pipeline:** Automated ingestion ensures datasets are versioned, auditable, and accessible to all layers.  
+- **Cross-Domain Scaling:** Once data is in the DB, OSIS can generate insights for **any registered domain**.  
+
+> ⚡ Note: Enterprises must **preload historical datasets** for OSIS to perform accurate trend analysis, anomaly detection, and strategic reasoning.  
+
+---
+
+## ⚙️ How to Run
+
+```bash
+# 1. Start the database (DuckDB/PostgreSQL/Enterprise DB)
+python db_setup.py
+
+# 2. Start Ollama with TinyLlama
+ollama run tinyllama
+
+# 3. Launch the Epistemic Dashboard
+streamlit run app.py
+
+
+⸻
+
+📆 Recommended Roadmap
+
+Phase	Week	Deliverables
+1 – Database Setup	1	Central DB + metadata registry + ETL scripts
+2 – Data Adapter	2	Schema-agnostic adapter layer for multi-domain datasets
+3 – Inference Layer	3	TinyLlama brief generation, AI summary templates
+4 – Tarka Governance	4	3-tier validation engine live
+5 – Logic Agent	5	Detect anomalies, reporting gaps, outliers
+6 – Chanakya Layer	6	Strategic AI recommendations and dashboard integration
+7 – Multi-Agent Scaling	7+	Integrate larger models for nuanced strategic reasoning
+
+
+⸻
+
+💡 Advantages
+	•	Auditability: Every AI output is traceable to its dataset, schema, and validation step.
+	•	Scalability: Schema-agnostic design allows easy addition of new domains.
+	•	Enterprise-Ready: Supports multi-dataset storage, historical context, and cross-departmental access.
+	•	Strategic Oversight: Logic + Chanakya layers allow the system to move from descriptive analytics to prescriptive decision-making.
+
+⸻
+
+📍 Maintainer: @nvnmpudi-droid
+Infrastructure: GitHub Codespaces + Docker + Streamlit/Flask + Local / Enterprise DB
+
+---
+
+This updated README **clarifies database requirements, historical data necessity, schema-agnostic design, and enterprise readiness**. It also positions OSIS as a full **strategic AI system**, ready for multiple organizational datasets beyond CDC mortality.  
+
+If you want, I can **also draw a visual layered architecture diagram highlighting database, schema-agnostic adapter, Tarka, Logic, and Chanakya interactions** for the README. This would make it very clear for enterprise stakeholders.  
+
+Do you want me to do that next?
 Good. Let’s close the loop properly.
 
 Here is a clean, grounded Systems Log Entry you can store (Not fantasy. Not inflation. Just architecture reality).
