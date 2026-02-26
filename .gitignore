@@ -10,3 +10,10 @@ pip-install.log
 .venv/
 __pycache__/
 *.pyc
+.venv/
+__pycache__/
+*.pyc
+logic_output.json
+strategic_brief.txt
+osis_snapshot.txt
+repo_context.txt
