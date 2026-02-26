@@ -19,6 +19,7 @@ from pathlib import Path
 
 from database_init import initialize_osis_db
 from analysis import run_logic_audit
+from forecast_agent import run_forecast_agent
 
 
 def print_banner():
@@ -133,6 +134,13 @@ def run_pipeline(skip_db: bool = False, use_llm: bool = True):
         print("⚠️  LLM returned empty response — printing Fact Packet instead.")
         print_fact_packet_summary(fact_packet)
         return
+    
+    from forecast_agent import run_forecast_agent
+
+    print("\n" + "━"*55)
+    print("  STEP 4 — Forecast Agent (Prophet 4-Week Ahead)")
+    print("━"*55)
+    run_forecast_agent()
 
     # ── DONE ─────────────────────────────────────────────────────────────────
     print("━" * 55)
