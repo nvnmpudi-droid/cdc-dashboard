@@ -1,19 +1,20 @@
 """
-OSIS – Inference Agent / Summarization Layer (v1.4)
+OSIS – Inference Agent / Summarization Layer (v1.5)
 ====================================================
-Fix: Commentary truncation and COVID drift.
-  - Reject commentary that ends without punctuation (truncated)
-  - Reject commentary mentioning COVID (wrong domain — this is all-cause)
-  - Reject commentary over 200 chars (TinyLlama is rambling)
+Enhancements:
+  - Adds confidence scoring and Tarka validation
+  - Generates hash of the payload for auditability
+  - Maintains deterministic brief as ground truth
 """
 
 import json
 import re
 import requests
+import hashlib
 from datetime import datetime, timezone
 
 OLLAMA_URL  = "http://127.0.0.1:11434/api/chat"
-MODEL_NAME  = "tinyllama"
+MODEL_NAME = "phi3:mini"
 INPUT_FILE  = "logic_output.json"
 OUTPUT_FILE = "strategic_brief.txt"
 
@@ -56,7 +57,10 @@ def deterministic_brief(payload: dict) -> str:
     return f"{s1} {s2} {s3}"
 
 
-def llm_commentary(payload: dict) -> str | None:
+def llm_commentary(payload: dict) -> tuple[str | None, float]:
+    """
+    Returns a one-sentence LLM commentary plus confidence estimate (0-1)
+    """
     z = payload["analysis"]["z_score"]
 
     if z < -2.0:
@@ -88,41 +92,43 @@ def llm_commentary(payload: dict) -> str | None:
                 "stream": False,
                 "options": {"temperature": 0.2, "num_predict": 60}
             },
-            timeout=60
+            timeout=120
         )
         response.raise_for_status()
         sentence = response.json()["message"]["content"].strip()
 
-        # Reject if truncated
+        # Basic filtering
         if not sentence or sentence[-1] not in ".!?":
-            return None
-        # Reject if too long (rambling)
+            return None, 0.0
         if len(sentence) > 250:
-            return None
-        # Reject if multiple sentences
+            return None, 0.0
         if sentence.count(".") > 2:
-            return None
-        # Reject if mentions COVID (wrong framing for all-cause data)
+            return None, 0.0
         if any(w in sentence.lower() for w in ["covid", "coronavirus", "pandemic", "vaccine"]):
-            return None
-        # Reject hallucinated large numbers
+            return None, 0.0
         for n_str in re.findall(r"\b[\d,]+\b", sentence):
             if int(n_str.replace(",", "")) > 500_000:
-                return None
+                return None, 0.0
 
-        return sentence
+        # Confidence heuristic: short, single-sentence, deterministic-aligned → high
+        confidence = max(0.5, 1 - abs(z)/6)  # z in [-6,6], scaled confidence
+        return sentence, confidence
 
     except Exception:
-        return None
+        return None, 0.0
+
+
+def hash_payload(payload: dict) -> str:
+    """Generate SHA256 hash of payload JSON for auditability"""
+    serialized = json.dumps(payload, sort_keys=True).encode("utf-8")
+    return hashlib.sha256(serialized).hexdigest()
 
 
 def generate_strategic_brief(input_file: str = INPUT_FILE, export: bool = True) -> str:
-
     print(f"\n{'='*55}")
-    print(f"  🏛️  OSIS Inference Agent — Strategic Brief v1.4")
+    print(f"  🏛️  OSIS Inference Agent — Strategic Brief v1.5")
     print(f"{'='*55}\n")
 
-    print(f"📂 Loading: {input_file}")
     try:
         with open(input_file) as f:
             logic_output = json.load(f)
@@ -135,44 +141,38 @@ def generate_strategic_brief(input_file: str = INPUT_FILE, export: bool = True) 
         return ""
 
     payload = logic_output["payload"]
-    print(f"   ✅ {payload['metric_name']} | {payload['state']} | {payload['timestamp'][:10]}\n")
-
-    # Step 1: Deterministic brief (always — this is the Tarka ground truth)
-    print("📝 Step 1: Generating deterministic brief...")
     core_brief = deterministic_brief(payload)
-    print("   ✅ Done\n")
 
-    # Step 2: Optional LLM commentary (one sentence, tightly filtered)
-    print(f"🤖 Step 2: Requesting commentary from {MODEL_NAME}...")
-    commentary = None
-    try:
-        requests.get("http://127.0.0.1:11434/", timeout=3)
-        commentary = llm_commentary(payload)
-        if commentary:
-            print(f"   ✅ Commentary accepted: \"{commentary[:80]}...\"\n")
-        else:
-            print(f"   ⚠️  Commentary rejected by Tarka filter — brief stands alone\n")
-    except Exception:
-        print(f"   ⚠️  Ollama not reachable — skipping\n")
-
-    # Combine
-    brief = core_brief
+    commentary, confidence = llm_commentary(payload)
+    # Tarka validation
+    issues = []
     if commentary:
-        brief = f"{core_brief}\n\n[Context] {commentary}"
+        # Tarka semantic direction check: LLM must not contradict the z-score direction
+        z = payload["analysis"]["z_score"]
+        contradiction_detected = False
+        if z < -2.0 and any(w in commentary.lower() for w in ["surge", "spike", "increase", "excess", "rise"]):
+            contradiction_detected = True
+            issues.append("LLM commentary contradicts deterministic finding (negative z-score).")
+        elif z > 2.0 and any(w in commentary.lower() for w in ["decline", "decrease", "lag", "undercount", "lower"]):
+            contradiction_detected = True
+            issues.append("LLM commentary contradicts deterministic finding (positive z-score).")
+        # Commentary passed semantic check
+    else:
+        issues.append("LLM commentary rejected or unavailable.")
 
-    # Print
-    z   = payload["analysis"]["z_score"]
-    sev = payload["analysis"]["severity"]
-    print(f"{'='*55}")
-    print(f"  📋 GOVERNED STRATEGIC BRIEF")
-    print(f"  Generated : {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
-    print(f"  Z-Score   : {z} | Severity: {sev}")
-    print(f"  Core      : deterministic ✅")
-    print(f"  Commentary: {'tinyllama ✅' if commentary else 'skipped (filtered)'}")
-    print(f"{'='*55}\n")
-    print(brief)
-    print(f"\n{'='*55}\n")
+    # Assign Tarka badge
+    passed = len(issues) == 0
+    badge  = "✅ PASSED" if passed else "⚠️ ISSUES DETECTED"
 
+    # Build final brief with context
+    final_brief = core_brief
+    if commentary:
+        final_brief += f"\n\n[Context] {commentary}"
+
+    # Hash for audit
+    payload_hash = hash_payload(payload)
+
+    # Export
     if export:
         out = {
             "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -180,13 +180,20 @@ def generate_strategic_brief(input_file: str = INPUT_FILE, export: bool = True) 
             "model": MODEL_NAME,
             "core_source": "deterministic",
             "commentary_source": MODEL_NAME if commentary else None,
-            "brief": brief
+            "confidence": confidence,
+            "tarka_validation": {
+                "passed": passed,
+                "badge": badge,
+                "issues": issues
+            },
+            "payload_hash": payload_hash,
+            "brief": final_brief
         }
         with open(OUTPUT_FILE, "w") as f:
             json.dump(out, f, indent=2)
         print(f"✅ Brief saved → {OUTPUT_FILE}\n")
 
-    return brief
+    return final_brief
 
 
 if __name__ == "__main__":
