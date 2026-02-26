@@ -1,6 +1,6 @@
 {
   "status": "success",
-  "generated_at": "2026-02-25T16:49:25.164737+00:00",
+  "generated_at": "2026-02-26T00:49:31.660026+00:00",
   "payload": {
     "domain": "public_health",
     "metric_name": "weekly_deaths_all_cause",

@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-02-25T16:49:33.187661+00:00",
+  "generated_at": "2026-02-26T00:49:55.643487+00:00",
   "source_fact_packet": "logic_output.json",
-  "model": "tinyllama",
+  "model": "phi3:mini",
   "core_source": "deterministic",
   "commentary_source": null,
+  "confidence": 0.0,
+  "tarka_validation": {
+    "passed": false,
+    "badge": "\u26a0\ufe0f ISSUES DETECTED",
+    "issues": [
+      "LLM commentary rejected or unavailable."
+    ]
+  },
+  "payload_hash": "61e732df9855d32df900db5c78d9ac2ad77e63b6d57f04b39309e6a1ee299f65",
   "brief": "For the week ending 2023-09-16, United States recorded 37,874 all-cause deaths, which is 4.31 standard deviations below the 4-week rolling mean of 51,351. In CDC mortality surveillance, a strongly negative Z-score in the most recent weeks is characteristic of data reporting lag \u2014 death certificates are still being processed and have not yet been fully counted, not a genuine mortality decline. Do not act on this figure as a real trend; validate the reporting pipeline and reassess in 4 to 6 weeks when the data matures (this dataset contains 30 prior CRITICAL events across 58 total anomalies)."
 }
