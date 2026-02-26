@@ -1,6 +1,7 @@
 {
   "status": "success",
-  "generated_at": "2026-02-26T00:49:31.660026+00:00",
+  "schema_version": "1.0",
+  "generated_at": "2026-02-26T20:17:53.012688+00:00",
   "payload": {
     "domain": "public_health",
     "metric_name": "weekly_deaths_all_cause",
@@ -10,7 +11,7 @@
     "baseline_stats": {
       "rolling_mean": 51351.0,
       "rolling_std": 3126.9,
-      "window_weeks": 4,
+      "window_periods": 4,
       "total_observations": 192
     },
     "analysis": {

@@ -1,148 +1,67 @@
-"""
-OSIS – Forecast Agent (v1.0)
-=============================
-Uses Prophet to generate 4-week ahead forecasts of all-cause mortality.
-Outputs forecast_output.json in the same structure as logic_output.json
-so the Inference Agent and Tarka layer can consume it identically.
-"""
-
 import json
 import warnings
 import duckdb
 import pandas as pd
 from datetime import datetime, timezone
+from dataset_config import DatasetConfig, get_default_config
 
 warnings.filterwarnings("ignore")
-
-DB_PATH     = "osis_strategic_archives.db"
+DB_PATH = "osis_strategic_archives.db"
 OUTPUT_FILE = "forecast_output.json"
-STATE       = "United States"
-METRIC      = "weekly_deaths_all_cause"
-HORIZON     = 4  # weeks ahead
 
-
-def load_data() -> pd.DataFrame:
+def load_data(config):
     con = duckdb.connect(DB_PATH, read_only=True)
-    df = con.execute("""
-        SELECT time_period, metric_value
-        FROM canonical_metrics
-        WHERE state = ? AND metric_name = ?
-        ORDER BY time_period ASC
-    """, [STATE, METRIC]).fetchdf()
+    df = con.execute("SELECT time_period, metric_value FROM canonical_metrics WHERE state=? AND metric_name=? AND domain=? ORDER BY time_period ASC",
+        [config.entity_filter, config.metric_name, config.domain]).fetchdf()
     con.close()
     df["time_period"] = pd.to_datetime(df["time_period"])
-    df = df.dropna(subset=["metric_value"])
-    return df
+    return df.dropna(subset=["metric_value"])
 
-
-def fit_and_forecast(df: pd.DataFrame) -> tuple[pd.DataFrame, object]:
+def run_forecast_agent(config=None):
+    if config is None:
+        config = get_default_config()
+    print("="*55)
+    print("  OSIS Forecast Agent -- Prophet v2.0")
+    print("="*55)
+    print(f"  Domain : {config.domain}")
+    print(f"  Metric : {config.metric_name}")
+    print(f"  Entity : {config.entity_filter}")
+    df = load_data(config)
+    print(f"  Loaded {len(df)} records")
     from prophet import Prophet
-
-    # Prophet requires columns named ds and y
     prophet_df = df.rename(columns={"time_period": "ds", "metric_value": "y"})
-
-    # Drop the last 4 weeks — known reporting lag, would distort training
-    prophet_df = prophet_df.iloc[:-4].copy()
-
-    model = Prophet(
-        yearly_seasonality=True,
-        weekly_seasonality=False,   # weekly data — no sub-weekly pattern
-        daily_seasonality=False,
-        seasonality_mode="additive",
-        interval_width=0.95,        # 95% uncertainty interval
-        changepoint_prior_scale=0.05  # conservative — public health data is smooth
-    )
+    prophet_df = prophet_df.iloc[:-config.lag_periods].copy()
+    model = Prophet(yearly_seasonality=True, weekly_seasonality=False,
+        daily_seasonality=False, seasonality_mode="additive",
+        interval_width=0.95, changepoint_prior_scale=0.05)
     model.fit(prophet_df)
-
-    future = model.make_future_dataframe(periods=HORIZON, freq="W")
+    future = model.make_future_dataframe(periods=config.forecast_horizon, freq="W")
     forecast = model.predict(future)
-
-    return forecast, model
-
-
-def build_output(df: pd.DataFrame, forecast: pd.DataFrame) -> dict:
-    # Last 4 rows are the forecast horizon
-    fcast_rows = forecast.tail(HORIZON)[["ds", "yhat", "yhat_lower", "yhat_upper"]].copy()
-    fcast_rows = fcast_rows.reset_index(drop=True)
-
-    # Last known actual value (excluding lag weeks)
-    last_actual = df.iloc[-5]  # 5th from end — avoids lag weeks
-
-    # Compute trend direction from forecast
-    first_fcast = float(fcast_rows.iloc[0]["yhat"])
-    last_fcast  = float(fcast_rows.iloc[-1]["yhat"])
-    trend = "increasing" if last_fcast > first_fcast else "decreasing"
-    pct_change = ((last_fcast - first_fcast) / first_fcast) * 100
-
-    forecasts = []
-    for _, row in fcast_rows.iterrows():
-        forecasts.append({
-            "week_ending": str(row["ds"])[:10],
-            "forecast":    round(float(row["yhat"])),
-            "lower_95":    round(float(row["yhat_lower"])),
-            "upper_95":    round(float(row["yhat_upper"]))
-        })
-
-    return {
+    fcast_rows = forecast.tail(config.forecast_horizon)[["ds","yhat","yhat_lower","yhat_upper"]].reset_index(drop=True)
+    last_actual = df.iloc[-(config.lag_periods+1)]
+    first_f = float(fcast_rows.iloc[0]["yhat"])
+    last_f  = float(fcast_rows.iloc[-1]["yhat"])
+    trend   = "increasing" if last_f > first_f else "decreasing"
+    pct     = ((last_f - first_f) / (first_f + 1e-9)) * 100
+    forecasts = [{"period_ending": str(r["ds"])[:10], "forecast": round(float(r["yhat"])),
+        "lower_95": round(float(r["yhat_lower"])), "upper_95": round(float(r["yhat_upper"]))}
+        for _,r in fcast_rows.iterrows()]
+    output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "status": "success",
-        "model": "prophet",
-        "state": STATE,
-        "metric": METRIC,
-        "horizon_weeks": HORIZON,
-        "last_known": {
-            "date":  str(last_actual["time_period"])[:10],
-            "value": int(last_actual["metric_value"])
-        },
+        "schema_version": config.schema_version,
+        "status": "success", "model": "prophet",
+        "domain": config.domain, "metric_name": config.metric_name,
+        "state": config.entity_filter,
+        "horizon_periods": config.forecast_horizon,
+        "last_known": {"date": str(last_actual["time_period"])[:10], "value": int(last_actual["metric_value"])},
         "forecast": forecasts,
-        "trend": {
-            "direction":   trend,
-            "pct_change":  round(pct_change, 2),
-            "start_value": round(first_fcast),
-            "end_value":   round(last_fcast)
-        },
-        "tarka_note": (
-            "Forecast generated by Prophet with 95% uncertainty intervals. "
-            "Final 4 weeks of training data excluded due to known CDC reporting lag. "
-            "Do not treat point estimates as ground truth — use interval bounds for planning."
-        )
+        "trend": {"direction": trend, "pct_change": round(pct,2), "start_value": round(first_f), "end_value": round(last_f)},
+        "tarka_note": f"Prophet forecast with 95% CI. Final {config.lag_periods} periods excluded for reporting lag."
     }
-
-
-def run_forecast_agent() -> dict:
-    print(f"\n{'='*55}")
-    print(f"  📈  OSIS Forecast Agent — Prophet v1.0")
-    print(f"{'='*55}\n")
-
-    print(f"📡 Step 1: Loading data from DuckDB...")
-    df = load_data()
-    print(f"   ✅ {len(df)} records loaded | {df['time_period'].min().date()} → {df['time_period'].max().date()}")
-
-    print(f"\n🔮 Step 2: Fitting Prophet model...")
-    forecast, model = fit_and_forecast(df)
-    print(f"   ✅ Model fitted | Forecasting {HORIZON} weeks ahead")
-
-    print(f"\n📊 Step 3: Building forecast output...")
-    output = build_output(df, forecast)
-
-    print(f"\n📅 Step 4: Forecast Summary")
-    print(f"   Last known value : {output['last_known']['date']} → {output['last_known']['value']:,}")
-    print(f"   Trend            : {output['trend']['direction']} ({output['trend']['pct_change']:+.1f}%)")
-    print(f"\n   {'Week Ending':<15} {'Forecast':>10} {'Lower 95%':>12} {'Upper 95%':>12}")
-    print(f"   {'-'*52}")
-    for f in output["forecast"]:
-        print(f"   {f['week_ending']:<15} {f['forecast']:>10,} {f['lower_95']:>12,} {f['upper_95']:>12,}")
-
     with open(OUTPUT_FILE, "w") as f:
         json.dump(output, f, indent=2)
-    print(f"\n✅ Forecast saved → {OUTPUT_FILE}")
-
-    print(f"\n{'='*55}")
-    print(f"  ✅  Forecast Agent Complete")
-    print(f"{'='*55}\n")
-
+    print(f"  Trend: {trend} ({pct:+.1f}%)")
+    for fc in forecasts:
+        print(f"  {fc['period_ending']}  {fc['forecast']:>8,}  [{fc['lower_95']:,} - {fc['upper_95']:,}]")
+    print(f"Forecast saved -> {OUTPUT_FILE}")
     return output
-
-
-if __name__ == "__main__":
-    run_forecast_agent()
