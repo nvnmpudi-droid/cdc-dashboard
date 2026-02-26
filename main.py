@@ -41,6 +41,10 @@ def run_pipeline(config=None, skip_db=False, use_llm=True):
         print("  Ollama unavailable -- deterministic brief only")
     print("\nSTEP 4 -- Forecast Agent")
     run_forecast_agent(config=config)
+    
+    print("\nSTEP 5 -- Chanakya Layer (Mimamsa Minister)")
+    from chanakya_agent import run_chanakya_agent
+    run_chanakya_agent(config=config)
     print("\nOSIS Pipeline Complete")
     print("  logic_output.json    -> LogicAgent Fact Packet")
     print("  strategic_brief.txt  -> Governed Strategic Brief")
