@@ -17,8 +17,12 @@
       "description": "Synthetic weekly inpatient admissions by service line",
       "source_type": "csv",
       "config_key": "DEMO_HOSPITAL",
-      "status": "demo",
-      "last_updated": null
+      "status": "active",
+      "last_updated": "2026-02-27",
+      "source_path": "data/hospital_admissions.csv",
+      "date_col": "week_ending",
+      "entity_col": "service_line",
+      "metric_col": "weekly_admissions"
     }
   ]
 }

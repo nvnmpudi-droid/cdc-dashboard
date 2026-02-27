@@ -36,3 +36,15 @@ CDC_MORTALITY = DatasetConfig(
 
 def get_default_config():
     return CDC_MORTALITY
+HOSPITAL_ADMISSIONS = DatasetConfig(
+    domain="hospital_ops",
+    metric_name="weekly_admissions",
+    source_label="Hospital Admissions (Synthetic Demo)",
+    date_col="week_ending",
+    value_col="weekly_admissions",
+    entity_col="service_line",
+    entity_filter="medical",
+    source_type="csv",
+    source_path="data/hospital_admissions.csv",
+    schema_version="1.0",
+)
