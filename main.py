@@ -1,3 +1,5 @@
+from citta import init_citta, append_memory
+from rajas_escalation import evaluate_rajas
 import argparse
 import sys
 from dataset_config import get_default_config
@@ -8,6 +10,7 @@ from forecast_agent import run_forecast_agent
 def run_pipeline(config=None, skip_db=False, use_llm=True):
     if config is None:
         config = get_default_config()
+    init_citta()
     print("="*55)
     print("  OSIS Pipeline v2.0")
     print("="*55)
