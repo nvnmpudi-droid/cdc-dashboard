@@ -1,47 +1,47 @@
 {
-  "generated_at": "2026-02-27T18:12:32.413570+00:00",
+  "generated_at": "2026-02-27T18:22:14.326674+00:00",
   "schema_version": "1.0",
   "status": "success",
   "model": "prophet",
-  "domain": "public_health",
-  "metric_name": "weekly_deaths_all_cause",
-  "state": "United States",
+  "domain": "hospital_ops",
+  "metric_name": "weekly_admissions",
+  "state": "medical",
   "horizon_periods": 4,
   "last_known": {
-    "date": "2023-08-19",
-    "value": 54466
+    "date": "2023-05-28",
+    "value": 668
   },
   "forecast": [
     {
-      "period_ending": "2023-08-20",
-      "forecast": 56653,
-      "lower_95": 46605,
-      "upper_95": 65444
+      "period_ending": "2023-06-04",
+      "forecast": 563,
+      "lower_95": 419,
+      "upper_95": 731
     },
     {
-      "period_ending": "2023-08-27",
-      "forecast": 57159,
-      "lower_95": 47308,
-      "upper_95": 66638
+      "period_ending": "2023-06-11",
+      "forecast": 476,
+      "lower_95": 320,
+      "upper_95": 630
     },
     {
-      "period_ending": "2023-09-03",
-      "forecast": 57344,
-      "lower_95": 48118,
-      "upper_95": 65911
+      "period_ending": "2023-06-18",
+      "forecast": 401,
+      "lower_95": 239,
+      "upper_95": 557
     },
     {
-      "period_ending": "2023-09-10",
-      "forecast": 57220,
-      "lower_95": 48183,
-      "upper_95": 67050
+      "period_ending": "2023-06-25",
+      "forecast": 398,
+      "lower_95": 234,
+      "upper_95": 553
     }
   ],
   "trend": {
-    "direction": "increasing",
-    "pct_change": 1.0,
-    "start_value": 56653,
-    "end_value": 57220
+    "direction": "decreasing",
+    "pct_change": -29.24,
+    "start_value": 563,
+    "end_value": 398
   },
   "tarka_note": "Prophet forecast with 95% CI. Final 4 periods excluded for reporting lag."
 }

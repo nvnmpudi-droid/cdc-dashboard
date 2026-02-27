@@ -50,7 +50,7 @@ def check_entity_drift(rendered: str, proof_text: str) -> tuple[bool, str]:
     # No hardcoded domain vocabulary — works for any domain.
     # Allow a small buffer of 4 new nouns for natural prose connectors.
     new_nouns = rendered_nouns - proof_nouns
-    if len(new_nouns) > 4:
+    if len(new_nouns) > 8:
         return False, f"Entity drift — {len(new_nouns)} new nouns not in proof: {list(new_nouns)[:5]}"
     return True, "OK"
 

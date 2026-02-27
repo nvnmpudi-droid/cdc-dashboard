@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-02-27T18:12:29.636865+00:00",
+  "generated_at": "2026-02-27T18:22:11.098644+00:00",
   "source_fact_packet": "logic_output.json",
   "model": "phi3:mini",
   "core_source": "deterministic",
   "commentary_source": "phi3:mini",
-  "confidence": 0.5,
+  "confidence": 0.9394,
   "tarka_validation": {
     "passed": true,
     "badge": "\u2705 PASSED",
     "issues": []
   },
-  "payload_hash": "4625573f3edd250c1ce8602da8c01db0e2e25a836f47abad8c76391aa8365db2",
-  "brief": "For the week ending 2023-09-16, United States recorded 37,874 all-cause deaths, which is 4.31 standard deviations below the 4-week rolling mean of 51,351. In CDC mortality surveillance, a strongly negative Z-score in the most recent weeks is characteristic of data reporting lag \u2014 death certificates are still being processed and have not yet been fully counted, not a genuine mortality decline. Do not act on this figure as a real trend; validate the reporting pipeline and reassess in 4 to 6 weeks when the data matures (this dataset contains 30 prior CRITICAL events across 58 total anomalies).\n\n[Context] The latest data may reflect improved healthcare responses and vaccination efforts leading to reduced fatalities from respiratory illnesses during peak seasons."
+  "payload_hash": "4f101ed4ac7ae3702c8bd9095853955c30b0137c6e9140e58c6664d1a9f5f6d8",
+  "brief": "For the week ending 2023-06-25, medical recorded 561 all-cause deaths, with a Z-score of 0.36 relative to the 4-week rolling mean of 526. This observation falls within normal statistical bounds, indicating stable mortality patterns with no significant deviation from baseline. Continue routine surveillance monitoring; note that this dataset has recorded 12 CRITICAL events historically, so ongoing vigilance remains appropriate.\n\n[Context] Routine mortality surveillance ensures consistent data collection for health trends and informs preventive measures to maintain population well-being."
 }
