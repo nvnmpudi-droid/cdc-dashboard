@@ -46,15 +46,12 @@ def check_causal_verb_drift(rendered: str, proof_text: str) -> tuple[bool, str]:
 def check_entity_drift(rendered: str, proof_text: str) -> tuple[bool, str]:
     rendered_nouns = extract_significant_nouns(rendered)
     proof_nouns    = extract_significant_nouns(proof_text)
-    # Allow domain terms we always expect
-    always_allowed = {"mortality","deaths","weekly","reporting","lag","anomaly",
-                      "escalate","baseline","critical","warning","normal","trend",
-                      "forecast","health","hospital","admissions","public","data",
-                      "system","pipeline","period","analysis","signal","score",
-                      "deviation","standard","mean","rolling","threshold","cause"}
-    new_nouns = rendered_nouns - proof_nouns - always_allowed
-    if len(new_nouns) > 3:  # allow small drift for prose connectors
-        return False, f"Entity drift — new nouns: {list(new_nouns)[:5]}"
+    # Dynamic: allowed terms come ONLY from the proof itself.
+    # No hardcoded domain vocabulary — works for any domain.
+    # Allow a small buffer of 4 new nouns for natural prose connectors.
+    new_nouns = rendered_nouns - proof_nouns
+    if len(new_nouns) > 4:
+        return False, f"Entity drift — {len(new_nouns)} new nouns not in proof: {list(new_nouns)[:5]}"
     return True, "OK"
 
 def check_length(rendered: str, max_words: int = 150) -> tuple[bool, str]:
