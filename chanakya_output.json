@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "schema_version": "1.0",
+  "generated_at": "2026-02-27T17:48:50.706074+00:00",
+  "agent_id": "chanakya_mimamsa_minister",
+  "domain": "public_health",
+  "metric_name": "weekly_deaths_all_cause",
+  "entity_filter": "United States",
+  "finding": {
+    "z_score": -4.31,
+    "severity": "CRITICAL",
+    "forecast_direction": "increasing",
+    "forecast_pct": 1.0,
+    "systemic_state": "TAMAS"
+  },
+  "urgency": "CRITICAL",
+  "sutra_applied": {
+    "action": "flag_reporting_lag",
+    "interpretation": "CRITICAL"
+  },
+  "recommendations": [
+    {
+      "priority": 0,
+      "action": "CRITICAL + increasing: immediate escalation. Forecast +1.0% over next periods.",
+      "category": "critical_escalation",
+      "escalate": true
+    },
+    {
+      "priority": 1,
+      "action": "Do not act \u2014 validate reporting pipeline first.",
+      "category": "immediate",
+      "escalate": false
+    },
+    {
+      "priority": 2,
+      "action": "Reassess in 4-6 weeks when lag clears.",
+      "category": "follow_up",
+      "escalate": false
+    },
+    {
+      "priority": 3,
+      "action": "No resource reallocation recommended.",
+      "category": "resource",
+      "escalate": false
+    }
+  ],
+  "justification_block": {
+    "pratijna": "The 4.31sigma drop in weekly_deaths_all_cause on 2023-09-16 is: CRITICAL",
+    "hetu": "Z-score -4.3100 (CRITICAL). Rolling mean: 51,351 over 4 periods.",
+    "udaharana": "Historical precedent: prior CRITICAL events in public_health with similar Z-scores matched this classification.",
+    "upanaya": "Current observation (4.31sigma drop) matches the historical pattern for flag reporting lag.",
+    "nigamana": "Therefore: CRITICAL Confidence grounded in deterministic analysis, not LLM inference."
+  },
+  "pancavayava_complete": true,
+  "escalate": false,
+  "narration": null,
+  "narration_firewall": "SKIPPED \u2014 Ollama unavailable",
+  "payload_hash": "7b06ad9e871fa6e0cb563d20815d8b1df3c93a95aae89456fec479c231876292"
+}

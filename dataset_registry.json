@@ -1,0 +1,24 @@
+{
+  "datasets": [
+    {
+      "id": "cdc_mortality",
+      "label": "CDC NVSS Weekly Mortality",
+      "domain": "public_health",
+      "description": "Weekly death counts by cause, US national and state level",
+      "source_type": "api",
+      "config_key": "CDC_MORTALITY",
+      "status": "active",
+      "last_updated": "2023-09-16"
+    },
+    {
+      "id": "demo_hospital",
+      "label": "Hospital Admissions (Demo)",
+      "domain": "hospital_ops",
+      "description": "Synthetic weekly inpatient admissions by service line",
+      "source_type": "csv",
+      "config_key": "DEMO_HOSPITAL",
+      "status": "demo",
+      "last_updated": null
+    }
+  ]
+}

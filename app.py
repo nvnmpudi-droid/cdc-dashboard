@@ -1,356 +1,180 @@
-"""
-OSIS – Epistemic Dashboard (v2.1)
-===================================
-Reads from:
-  - osis_strategic_archives.db  (canonical_metrics table)
-  - logic_output.json           (LogicAgent Fact Packet)
-  - strategic_brief.txt         (Inference Agent brief)
-  - forecast_output.json        (Prophet 4-week ahead forecast)
-
-Run:  streamlit run app.py
-"""
-
-import json
-import duckdb
-import pandas as pd
 import streamlit as st
-import plotly.express as px
-import plotly.graph_objects as go
+import json
+import subprocess
+import sys
 from pathlib import Path
+from dataset_config import get_default_config
+from conversation_agent import translate_query, contextualize
 
-DB_NAME          = "osis_strategic_archives.db"
-LOGIC_OUTPUT     = "logic_output.json"
-BRIEF_OUTPUT     = "strategic_brief.txt"
-FORECAST_OUTPUT  = "forecast_output.json"
+st.set_page_config(page_title="OSIS — Epistemic Truth Engine", layout="wide")
 
-# ── Page config ───────────────────────────────────────────────────────────────
-st.set_page_config(
-    page_title="OSIS — Epistemic Dashboard",
-    page_icon="🏛️",
-    layout="wide"
-)
+# ── Load dataset registry ──────────────────────────────────────────────────
+def load_registry():
+    p = Path("dataset_registry.json")
+    if not p.exists():
+        return [{"id":"cdc_mortality","label":"CDC NVSS Weekly Mortality","domain":"public_health","status":"active"}]
+    return json.loads(p.read_text())["datasets"]
 
-# ── Styling ───────────────────────────────────────────────────────────────────
-st.markdown("""
-<style>
-    .metric-card { background:#1e1e2e; border-radius:8px; padding:16px; }
-    .severity-CRITICAL { color:#ff4b4b; font-weight:bold; }
-    .severity-WARNING  { color:#ffa500; font-weight:bold; }
-    .severity-NORMAL   { color:#21c354; font-weight:bold; }
-    .brief-box {
-        background:#0e1117; border:1px solid #333; border-radius:8px;
-        padding:20px; font-size:15px; line-height:1.7; color:#e0e0e0;
-    }
-    .tarka-pass { color:#21c354; }
-    .tarka-fail { color:#ff4b4b; }
-</style>
-""", unsafe_allow_html=True)
+def load_json(path):
+    p = Path(path)
+    if p.exists():
+        try: return json.loads(p.read_text())
+        except: return None
+    return None
 
-# ── Header ────────────────────────────────────────────────────────────────────
-st.title("🏛️ OSIS — Organizational Strategy Intelligence System")
-st.caption("Neuro-Symbolic Epistemic Dashboard  |  CDC Mortality Surveillance")
-st.markdown("---")
-
-
-# ── Data Loaders ──────────────────────────────────────────────────────────────
-
-@st.cache_data(ttl=300)
-def load_canonical_metrics():
-    if not Path(DB_NAME).exists():
-        return pd.DataFrame()
-    con = duckdb.connect(DB_NAME, read_only=True)
-    df = con.execute("""
-        SELECT time_period, metric_value, state, metric_name
-        FROM canonical_metrics
-        WHERE metric_name = 'weekly_deaths_all_cause'
-        ORDER BY time_period
-    """).df()
-    con.close()
-    df["time_period"] = pd.to_datetime(df["time_period"])
-    return df
-
-
-@st.cache_data(ttl=60)
-def load_logic_output():
-    if not Path(LOGIC_OUTPUT).exists():
-        return None
-    with open(LOGIC_OUTPUT) as f:
-        return json.load(f)
-
-
-@st.cache_data(ttl=60)
-def load_brief():
-    if not Path(BRIEF_OUTPUT).exists():
-        return None
-    with open(BRIEF_OUTPUT) as f:
-        return json.load(f)
-
-
-@st.cache_data(ttl=60)
-def load_forecast():
-    if not Path(FORECAST_OUTPUT).exists():
-        return None
-    with open(FORECAST_OUTPUT) as f:
-        return json.load(f)
-
-
-# ── Load everything ───────────────────────────────────────────────────────────
-df_all      = load_canonical_metrics()
-logic_out   = load_logic_output()
-brief_data  = load_brief()
-forecast    = load_forecast()
-
-# ── Sidebar ───────────────────────────────────────────────────────────────────
+# ── Sidebar ────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.header("⚙️ Controls")
+    st.title("⚔️ OSIS")
+    st.caption("Epistemic Truth Engine")
+    st.markdown("---")
 
-    if df_all.empty:
-        st.error("No data. Run:  python main.py")
+    datasets = load_registry()
+    dataset_labels = {d["label"]: d for d in datasets}
+    selected_label = st.selectbox("📊 Select Dataset", list(dataset_labels.keys()))
+    selected_ds = dataset_labels[selected_label]
+
+    st.markdown(f"**Domain:** {selected_ds['domain']}")
+    st.markdown(f"**Status:** {selected_ds['status']}")
+    st.markdown("---")
+
+    st.markdown("#### 💬 Ask a Question")
+    user_query = st.text_input("", placeholder="e.g. Show me worst anomaly this year")
+
+    if user_query:
+        with st.spinner("Translating query..."):
+            structured = translate_query(user_query, datasets)
+        st.caption("🔄 Translated to structured query:")
+        st.json(structured)
+        if structured.get("ambiguous"):
+            st.warning(f"Clarification needed: {structured.get('clarification_needed')}")
+
+    st.markdown("---")
+    run_btn = st.button("▶ Run Analysis", type="primary", use_container_width=True)
+    skip_db = st.checkbox("Skip data refresh (use cached)", value=True)
+
+    st.markdown("---")
+    st.markdown("#### ℹ️ Explain a term")
+    explain_term = st.text_input("", placeholder="e.g. z-score, tamas, reporting lag", key="explain")
+    if explain_term:
+        st.info(contextualize(explain_term))
+
+# ── Main panel ─────────────────────────────────────────────────────────────
+st.title("OSIS — Organizational Strategy Intelligence System")
+st.caption("LLM = Vocal Cord Only | All reasoning is deterministic | Every claim is auditable")
+
+if run_btn:
+    with st.spinner("Running OSIS pipeline..."):
+        cmd = [sys.executable, "main.py"]
+        if skip_db:
+            cmd.append("--skip-db")
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=".")
+    if result.returncode != 0:
+        st.error("Pipeline error:")
+        st.code(result.stderr)
     else:
-        states = sorted(df_all["state"].unique().tolist())
-        selected_state = st.selectbox(
-            "Jurisdiction", states,
-            index=states.index("United States") if "United States" in states else 0
-        )
-        st.markdown("---")
-        st.markdown("**Pipeline Status**")
-        st.markdown("✅ DB" if Path(DB_NAME).exists() else "❌ DB not found")
-        st.markdown("✅ Logic Agent" if Path(LOGIC_OUTPUT).exists() else "⚠️ logic_output.json missing")
-        st.markdown("✅ Inference Agent" if Path(BRIEF_OUTPUT).exists() else "⚠️ strategic_brief.txt missing")
-        st.markdown("✅ Forecast Agent" if Path(FORECAST_OUTPUT).exists() else "⚠️ forecast_output.json missing")
-        st.markdown("---")
-        st.caption("OSIS v2.1 | CDC NVSS 2020–2023")
+        st.success("Pipeline complete")
 
-if df_all.empty:
-    st.warning("Run `python main.py` first to initialize the OSIS archive.")
+# ── Load outputs ───────────────────────────────────────────────────────────
+logic    = load_json("logic_output.json")
+forecast = load_json("forecast_output.json")
+chanakya = load_json("chanakya_output.json")
+
+if not logic:
+    st.info("Select a dataset and click **Run Analysis** to begin.")
     st.stop()
 
-df = df_all[df_all["state"] == selected_state].copy()
-
-# ── KPI Row ───────────────────────────────────────────────────────────────────
-st.subheader("📊 Key Metrics")
+# ── Row 1: Key metrics ─────────────────────────────────────────────────────
+payload  = logic.get("payload", {})
+analysis = payload.get("analysis", {})
+baseline = payload.get("baseline_stats", {})
 
 col1, col2, col3, col4 = st.columns(4)
+z = analysis.get("z_score", 0)
+sev = analysis.get("severity", "NORMAL")
+sev_color = {"CRITICAL":"🔴","WARNING":"🟡","NORMAL":"🟢"}.get(sev,"⚪")
+col1.metric("Z-Score", f"{z:.4f}")
+col2.metric("Severity", f"{sev_color} {sev}")
+col3.metric("Rolling Mean", f"{baseline.get('rolling_mean',0):,.0f}")
+col4.metric("Anomalies (total)", payload.get("total_anomalies","—"))
 
-total    = int(df["metric_value"].sum())
-peak_idx = df["metric_value"].idxmax()
-peak_val = int(df.loc[peak_idx, "metric_value"])
-peak_dt  = df.loc[peak_idx, "time_period"].strftime("%Y-%m-%d")
+# ── Row 2: Chanakya urgency ────────────────────────────────────────────────
+if chanakya:
+    urgency = chanakya.get("urgency","—")
+    guna    = chanakya.get("finding",{}).get("systemic_state","—")
+    escalate = chanakya.get("escalate", False)
+    u_color = {"CRITICAL":"🔴","HIGH":"🟠","MEDIUM":"🟡","LOW":"🔵","MONITOR":"🟢"}.get(urgency,"⚪")
+    g_color = {"RAJAS":"🔴","TAMAS":"🟤","SATTVA":"🟢"}.get(guna,"⚪")
 
-z_score  = None
-severity = "N/A"
-if logic_out and logic_out.get("status") == "success":
-    p = logic_out["payload"]
-    if p.get("state") == selected_state:
-        z_score  = p["analysis"]["z_score"]
-        severity = p["analysis"]["severity"]
+    st.markdown("---")
+    c1,c2,c3 = st.columns(3)
+    c1.metric("Urgency",  f"{u_color} {urgency}")
+    c2.metric("Guṇa State", f"{g_color} {guna}")
+    c3.metric("Escalate",   "⚠️ YES" if escalate else "✅ NO")
 
-col1.metric("Total Deaths (Period)", f"{total:,}")
-col2.metric("Peak Week", peak_dt)
-col3.metric("Peak Value", f"{peak_val:,}")
+# ── Row 3: Pañcavayava justification ──────────────────────────────────────
+if chanakya and chanakya.get("justification_block"):
+    st.markdown("---")
+    st.subheader("📐 Pañcavayava — Causal Justification")
+    st.caption("Deterministic 5-member proof constructed by ML Brain. LLM did not generate this.")
+    jb = chanakya["justification_block"]
+    labels = {"pratijna":"1. Pratijñā (Proposition)","hetu":"2. Hetu (Reason)","udaharana":"3. Udāharaṇa (Example)","upanaya":"4. Upanaya (Application)","nigamana":"5. Nigamana (Conclusion)"}
+    for key, label in labels.items():
+        if jb.get(key):
+            st.markdown(f"**{label}**")
+            st.info(jb[key])
 
-if z_score is not None:
-    col4.metric("Latest Z-Score", f"{z_score:.2f}", delta=severity,
-                delta_color="inverse" if z_score < 0 else "normal")
-else:
-    col4.metric("Z-Score", "Run main.py")
+# ── Row 4: Chanakya recommendations ───────────────────────────────────────
+if chanakya and chanakya.get("recommendations"):
+    st.markdown("---")
+    st.subheader("⚔️ Strategic Recommendations")
+    st.caption("Generated by deterministic policy registry. LLM vocal cord renders below.")
+    recs = sorted(chanakya["recommendations"], key=lambda r: r.get("priority",99))
+    for rec in recs:
+        icon = "🚨" if rec.get("escalate") else "📋"
+        cat  = rec.get("category","").replace("_"," ").title()
+        st.markdown(f"{icon} **[{cat}]** {rec['action']}")
 
-st.markdown("---")
+    if chanakya.get("narration") and chanakya.get("narration_firewall") == "PASSED":
+        st.markdown("---")
+        st.markdown("**🗣️ LLM Narration** *(vocal cord — rendered from validated proof)*")
+        st.success(chanakya["narration"])
+        st.caption(f"Narration Firewall: {chanakya['narration_firewall']}")
+    elif chanakya.get("narration_firewall","").startswith("REJECTED"):
+        st.warning(f"Narration rejected by firewall: {chanakya['narration_firewall']}")
 
-# ── Chart Row 1: History + Forecast ──────────────────────────────────────────
-col_left, col_right = st.columns(2)
+# ── Row 5: Top anomalies ───────────────────────────────────────────────────
+top = payload.get("top_anomalies", [])
+if top:
+    st.markdown("---")
+    st.subheader("📊 Top Anomalies Detected")
+    import pandas as pd
+    df = pd.DataFrame(top)
+    if "time_period" in df.columns:
+        df["time_period"] = pd.to_datetime(df["time_period"]).dt.strftime("%Y-%m-%d")
+    st.dataframe(df, use_container_width=True)
 
-with col_left:
-    st.subheader("📈 Weekly Deaths + 4-Week Forecast")
+# ── Row 6: Forecast ────────────────────────────────────────────────────────
+if forecast and forecast.get("forecast"):
+    st.markdown("---")
+    st.subheader("📈 Forecast — Next 4 Periods")
+    trend = forecast.get("trend",{})
+    direction = trend.get("direction","—")
+    pct = trend.get("pct_change",0)
+    d_icon = "📈" if direction=="increasing" else ("📉" if direction=="decreasing" else "➡️")
+    st.caption(f"Trend: {d_icon} {direction} ({pct:+.1f}%)")
+    fc_rows = []
+    for fc in forecast["forecast"]:
+        fc_rows.append({"Period":fc["ds"][:10],"Forecast":f"{fc['forecast']:,}","Lower 95%":f"{fc['lower_95']:,}","Upper 95%":f"{fc['upper_95']:,}"})
+    st.table(fc_rows)
 
-    fig = go.Figure()
-
-    # Historical line
-    fig.add_trace(go.Scatter(
-        x=df["time_period"], y=df["metric_value"],
-        mode="lines", name="Observed",
-        line=dict(color="#e63946", width=2)
-    ))
-
-    # Anomaly markers
-    if logic_out and logic_out.get("status") == "success":
-        top_anomalies = logic_out["payload"].get("top_anomalies", [])
-        if top_anomalies:
-            anom_df = pd.DataFrame(top_anomalies)
-            anom_df["date"] = pd.to_datetime(anom_df["date"])
-            fig.add_trace(go.Scatter(
-                x=anom_df["date"], y=anom_df["value"],
-                mode="markers", name="Anomaly (≥2σ)",
-                marker=dict(color="orange", size=10, symbol="x")
-            ))
-
-    # Forecast traces
-    if forecast and forecast.get("status") == "success":
-        fcast_df = pd.DataFrame(forecast["forecast"])
-        fcast_df["week_ending"] = pd.to_datetime(fcast_df["week_ending"])
-
-        # Uncertainty band
-        fig.add_trace(go.Scatter(
-            x=pd.concat([fcast_df["week_ending"], fcast_df["week_ending"][::-1]]),
-            y=pd.concat([fcast_df["upper_95"], fcast_df["lower_95"][::-1]]),
-            fill="toself", fillcolor="rgba(99,110,250,0.15)",
-            line=dict(color="rgba(255,255,255,0)"),
-            name="95% Interval", showlegend=True
-        ))
-
-        # Forecast line
-        fig.add_trace(go.Scatter(
-            x=fcast_df["week_ending"], y=fcast_df["forecast"],
-            mode="lines+markers", name="Forecast (Prophet)",
-            line=dict(color="#636efa", width=2, dash="dash"),
-            marker=dict(size=8)
-        ))
-
-    fig.update_layout(
-        showlegend=True, plot_bgcolor="#0e1117",
-        paper_bgcolor="#0e1117", font_color="#e0e0e0",
-        legend=dict(bgcolor="#1e1e2e"),
-        xaxis_title="Week", yaxis_title="Deaths"
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-with col_right:
-    st.subheader("📉 Annual Aggregation")
-    df["year"] = df["time_period"].dt.year
-    annual = df.groupby("year")["metric_value"].sum().reset_index()
-    fig2 = px.bar(
-        annual, x="year", y="metric_value",
-        labels={"year": "Year", "metric_value": "Total Deaths"},
-        color="metric_value", color_continuous_scale="Reds",
-        text_auto=True
-    )
-    fig2.update_layout(
-        showlegend=False, plot_bgcolor="#0e1117",
-        paper_bgcolor="#0e1117", font_color="#e0e0e0"
-    )
-    st.plotly_chart(fig2, use_container_width=True)
+# ── Row 7: Audit trail ─────────────────────────────────────────────────────
+with st.expander("🔍 Audit Trail"):
+    if logic:
+        st.caption("Logic Agent Vaikharī")
+        st.json({"payload_hash": payload.get("payload_hash","—"), "schema_version": logic.get("schema_version","—"), "generated_at": payload.get("timestamp","—"), "tarka_result": logic.get("tarka_result","—")})
+    if chanakya:
+        st.caption("Chanakya Vaikharī")
+        st.json({"payload_hash": chanakya.get("payload_hash","—"), "pancavayava_complete": chanakya.get("pancavayava_complete"), "narration_firewall": chanakya.get("narration_firewall","—"), "sutra_applied": chanakya.get("sutra_applied",{})})
 
 st.markdown("---")
-
-# ── Forecast Detail Panel ─────────────────────────────────────────────────────
-st.subheader("🔮 Forecast Agent — Prophet 4-Week Ahead")
-
-if forecast and forecast.get("status") == "success":
-    trend = forecast["trend"]
-    last  = forecast["last_known"]
-
-    fc1, fc2, fc3, fc4 = st.columns(4)
-    fc1.metric("Last Known Value", f"{last['value']:,}", delta=last["date"])
-    fc2.metric("Trend Direction", trend["direction"].capitalize())
-    fc3.metric("4-Week Change", f"{trend['pct_change']:+.1f}%")
-    fc4.metric("Forecast Start", f"{trend['start_value']:,}")
-
-    fcast_df = pd.DataFrame(forecast["forecast"])
-    fcast_df.columns = ["Week Ending", "Forecast", "Lower 95%", "Upper 95%"]
-    fcast_df["Forecast"]  = fcast_df["Forecast"].apply(lambda x: f"{x:,}")
-    fcast_df["Lower 95%"] = fcast_df["Lower 95%"].apply(lambda x: f"{x:,}")
-    fcast_df["Upper 95%"] = fcast_df["Upper 95%"].apply(lambda x: f"{x:,}")
-    st.dataframe(fcast_df, use_container_width=True, hide_index=True)
-
-    st.caption(f"⚠️ {forecast['tarka_note']}")
-else:
-    st.info("Run `python main.py` to generate forecast.")
-
-st.markdown("---")
-
-# ── Logic Agent Panel ─────────────────────────────────────────────────────────
-st.subheader("🧠 Logic Agent — Anomaly Audit")
-
-if logic_out and logic_out.get("status") == "success":
-    p = logic_out["payload"]
-    a = p["analysis"]
-    b = p["baseline_stats"]
-
-    lc1, lc2, lc3, lc4 = st.columns(4)
-    lc1.metric("Observed Value",   f"{p['observed_value']:,.0f}")
-    lc2.metric("4-Week Baseline",  f"{b['rolling_mean']:,.0f}")
-    lc3.metric("Z-Score",          f"{a['z_score']:.4f}")
-    lc4.metric("Severity",         a["severity"])
-
-    fig_gauge = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=a["z_score"],
-        title={"text": "Z-Score (Latest Week)"},
-        gauge={
-            "axis": {"range": [-6, 6]},
-            "bar": {"color": "#e63946"},
-            "steps": [
-                {"range": [-6, -2], "color": "#ff4b4b"},
-                {"range": [-2,  2], "color": "#21c354"},
-                {"range": [ 2,  6], "color": "#ff4b4b"},
-            ],
-            "threshold": {
-                "line": {"color": "white", "width": 2},
-                "thickness": 0.75,
-                "value": a["z_score"]
-            }
-        }
-    ))
-    fig_gauge.update_layout(
-        height=250, paper_bgcolor="#0e1117", font_color="#e0e0e0"
-    )
-    st.plotly_chart(fig_gauge, use_container_width=True)
-
-    with st.expander("📄 Full Fact Packet JSON"):
-        st.json(logic_out)
-else:
-    st.info("Run `python main.py --skip-db` to generate the Fact Packet.")
-
-st.markdown("---")
-
-# ── Strategic Brief Panel ─────────────────────────────────────────────────────
-st.subheader("🏛️ Governed Strategic Brief")
-
-if brief_data:
-    tarka      = brief_data.get("tarka_validation", {})
-    passed     = tarka.get("passed", False)
-    issues     = tarka.get("issues", [])
-    brief_text = brief_data.get("brief", "")
-    gen_time   = brief_data.get("generated_at", "")[:19].replace("T", " ")
-    model      = brief_data.get("model", "unknown")
-    confidence = brief_data.get("confidence", 0.0)
-    badge      = tarka.get("badge", "")
-
-    bc1, bc2, bc3 = st.columns(3)
-    bc1.metric("Tarka Validation", badge)
-    bc2.metric("Model", model)
-    bc3.metric("Confidence", f"{confidence:.2f}" if confidence else "—")
-
-    if not passed:
-        for issue in issues:
-            st.warning(issue)
-
-    st.markdown(f"*Generated: {gen_time} UTC*")
-    st.markdown(f"<div class='brief-box'>{brief_text}</div>", unsafe_allow_html=True)
-
-    with st.expander("📄 Full Brief JSON"):
-        st.json(brief_data)
-else:
-    st.info(
-        "Strategic Brief not yet generated. "
-        "Start Ollama (`ollama serve`) then run `python main.py --skip-db`."
-    )
-    if logic_out and logic_out.get("status") == "success":
-        a = logic_out["payload"]["analysis"]
-        z = a["z_score"]
-        st.markdown("**Deterministic Fallback:**")
-        if z < -2.0:
-            st.warning(
-                f"Z-Score of {z:.2f} is strongly negative — likely CDC reporting lag. "
-                "Validate the pipeline before acting on this figure."
-            )
-        elif z > 2.0:
-            st.error(
-                f"Z-Score of {z:.2f} signals excess mortality ({abs(z):.1f}σ above baseline). "
-                "Escalate to epidemiological review."
-            )
-        else:
-            st.success("System operating within normal parameters.")
-
-st.markdown("---")
-st.caption("OSIS v2.1 — Neuro-Symbolic Public Health Intelligence | CDC NVSS 2020–2023")
+st.caption("OSIS v3.0 | LLM = Vocal Cord Only | Pañcavayava proof is deterministic | Every output is hashed")
