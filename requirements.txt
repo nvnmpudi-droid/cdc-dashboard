@@ -7,3 +7,5 @@ watchdog==4.0.0
 evidently==0.4.19
 langchain==0.3.2
 langchain-ollama==0.2.0
+prophet>=1.1.5
+pystan>=3.0.0
