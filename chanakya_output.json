@@ -1,53 +1,59 @@
 {
   "status": "success",
   "schema_version": "1.0",
-  "generated_at": "2026-02-27T18:22:14.330910+00:00",
+  "generated_at": "2026-02-28T17:56:39.203982+00:00",
   "agent_id": "chanakya_mimamsa_minister",
-  "domain": "hospital_ops",
-  "metric_name": "weekly_admissions",
-  "entity_filter": "medical",
+  "domain": "public_health",
+  "metric_name": "weekly_deaths_all_cause",
+  "entity_filter": "United States",
   "finding": {
-    "z_score": 0.3636,
-    "severity": "NORMAL",
-    "forecast_direction": "decreasing",
-    "forecast_pct": -29.24,
+    "z_score": -4.31,
+    "severity": "CRITICAL",
+    "forecast_direction": "increasing",
+    "forecast_pct": 1.0,
     "systemic_state": "TAMAS"
   },
-  "urgency": "LOW",
+  "urgency": "CRITICAL",
   "sutra_applied": {
-    "action": "flag_normal",
-    "interpretation": "NORMAL"
+    "action": "flag_reporting_lag",
+    "interpretation": "CRITICAL"
   },
   "recommendations": [
     {
+      "priority": 0,
+      "action": "CRITICAL + increasing: immediate escalation. Forecast +1.0% over next periods.",
+      "category": "critical_escalation",
+      "escalate": true
+    },
+    {
       "priority": 1,
-      "action": "Normal parameters \u2014 continue monitoring.",
+      "action": "Do not act \u2014 validate reporting pipeline first.",
       "category": "immediate",
       "escalate": false
     },
     {
       "priority": 2,
-      "action": "No action required.",
+      "action": "Reassess in 4-6 weeks when lag clears.",
       "category": "follow_up",
       "escalate": false
     },
     {
       "priority": 3,
-      "action": "No resource action.",
+      "action": "No resource reallocation recommended.",
       "category": "resource",
       "escalate": false
     }
   ],
   "justification_block": {
-    "pratijna": "The 0.36sigma spike in weekly_admissions on 2023-06-25 is: NORMAL",
-    "hetu": "Z-score 0.3636 (NORMAL). Rolling mean: 526 over 4 periods.",
-    "udaharana": "Historical precedent: prior NORMAL events in hospital_ops with similar Z-scores matched this classification.",
-    "upanaya": "Current observation (0.36sigma spike) matches the historical pattern for flag normal.",
-    "nigamana": "Therefore: NORMAL Confidence grounded in deterministic analysis, not LLM inference."
+    "pratijna": "The 4.31sigma drop in weekly_deaths_all_cause on 2023-09-16 is: CRITICAL",
+    "hetu": "Z-score -4.3100 (CRITICAL). Rolling mean: 51,351 over 4 periods.",
+    "udaharana": "Historical precedent: prior CRITICAL events in public_health with similar Z-scores matched this classification.",
+    "upanaya": "Current observation (4.31sigma drop) matches the historical pattern for flag reporting lag.",
+    "nigamana": "Therefore: CRITICAL Confidence grounded in deterministic analysis, not LLM inference."
   },
   "pancavayava_complete": true,
   "escalate": false,
   "narration": null,
-  "narration_firewall": "SKIPPED \u2014 empty response",
-  "payload_hash": "13ac84249899bd9ad00d59ca2f1a7c2551c17749de10dec6458b06597b07b8e3"
+  "narration_firewall": "SKIPPED \u2014 Ollama unavailable",
+  "payload_hash": "d29f1906835de4f849821000a1b1dd0e224c53134e9c61e4ab63c1a2a0412454"
 }
