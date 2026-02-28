@@ -1,5 +1,11 @@
 
-import duckdb, json, hashlib
+import json, hashlib
+try:
+    import duckdb
+    CITTA_AVAILABLE = True
+except ImportError:
+    duckdb = None
+    CITTA_AVAILABLE = False
 from datetime import datetime, timezone
 from pathlib import Path
 

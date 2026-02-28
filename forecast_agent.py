@@ -28,7 +28,11 @@ def run_forecast_agent(config=None):
     print(f"  Entity : {config.entity_filter}")
     df = load_data(config)
     print(f"  Loaded {len(df)} records")
-    from prophet import Prophet
+    try:
+        from prophet import Prophet
+    except ImportError:
+        print("  Forecast Agent: Prophet not available — skipping forecast")
+        return {"status": "skipped", "message": "Prophet not installed", "forecast": [], "trend": {"direction": "unknown", "pct_change": 0.0}}
     prophet_df = df.rename(columns={"time_period": "ds", "metric_value": "y"})
     prophet_df = prophet_df.iloc[:-config.lag_periods].copy()
     model = Prophet(yearly_seasonality=True, weekly_seasonality=False,

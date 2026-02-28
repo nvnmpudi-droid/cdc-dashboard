@@ -154,7 +154,7 @@ if top:
     st.dataframe(df, use_container_width=True)
 
 # ── Row 6: Forecast ────────────────────────────────────────────────────────
-if forecast and forecast.get("forecast"):
+if forecast and forecast.get("forecast") and forecast.get("status") != "skipped":
     st.markdown("---")
     st.subheader("📈 Forecast — Next 4 Periods")
     trend = forecast.get("trend",{})
