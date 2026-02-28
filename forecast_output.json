@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-28T17:56:39.202972+00:00",
+  "generated_at": "2026-02-28T17:58:39.733687+00:00",
   "schema_version": "1.0",
   "status": "success",
   "model": "prophet",
@@ -15,26 +15,26 @@
     {
       "period_ending": "2023-08-20",
       "forecast": 56653,
-      "lower_95": 47139,
-      "upper_95": 66310
+      "lower_95": 46565,
+      "upper_95": 66297
     },
     {
       "period_ending": "2023-08-27",
       "forecast": 57159,
-      "lower_95": 48118,
-      "upper_95": 66877
+      "lower_95": 47846,
+      "upper_95": 66185
     },
     {
       "period_ending": "2023-09-03",
       "forecast": 57344,
-      "lower_95": 47408,
-      "upper_95": 67511
+      "lower_95": 47227,
+      "upper_95": 66444
     },
     {
       "period_ending": "2023-09-10",
       "forecast": 57220,
-      "lower_95": 48004,
-      "upper_95": 65797
+      "lower_95": 48134,
+      "upper_95": 65912
     }
   ],
   "trend": {

@@ -48,6 +48,16 @@ def run_pipeline(config=None, skip_db=False, use_llm=True):
     print("\nSTEP 5 -- Chanakya Layer (Mimamsa Minister)")
     from chanakya_agent import run_chanakya_agent
     run_chanakya_agent(config=config)
+    try:
+        import hashlib, json as _j
+        _lh = hashlib.sha256(_j.dumps(fact_packet, sort_keys=True, default=str).encode()).hexdigest()
+        _cd = {}
+        try: _cd = _j.loads(open("chanakya_output.json").read())
+        except: pass
+        append_memory(agent_id="osis_pipeline",domain=config.domain,metric=config.metric_name,entity=config.entity_filter,schema_version=config.schema_version,input_hash=_lh[:16],output_hash=_cd.get("payload_hash","unknown")[:16],tarka_result=_cd.get("narration_firewall","UNKNOWN"),guna_state=_cd.get("finding",{}).get("systemic_state","UNKNOWN"),urgency=_cd.get("urgency"),z_score=fact_packet.get("payload",{}).get("analysis",{}).get("z_score"),severity=fact_packet.get("payload",{}).get("analysis",{}).get("severity"),anomalies_found=fact_packet.get("payload",{}).get("total_anomalies"),escalate=_cd.get("escalate",False),sutra_action=_cd.get("sutra_applied",{}).get("action"),pancavayava_complete=_cd.get("pancavayava_complete",False))
+        print("  Citta: logged")
+    except Exception as e:
+        print(f"  Citta: skipped — {e}")
     print("\nOSIS Pipeline Complete")
     print("  logic_output.json    -> LogicAgent Fact Packet")
     print("  strategic_brief.txt  -> Governed Strategic Brief")

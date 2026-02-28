@@ -1,7 +1,7 @@
 {
   "status": "success",
   "schema_version": "1.0",
-  "generated_at": "2026-02-28T17:56:38.314881+00:00",
+  "generated_at": "2026-02-28T17:58:39.069960+00:00",
   "payload": {
     "domain": "public_health",
     "metric_name": "weekly_deaths_all_cause",

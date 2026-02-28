@@ -1,7 +1,7 @@
 {
   "status": "success",
   "schema_version": "1.0",
-  "generated_at": "2026-02-28T17:56:39.203982+00:00",
+  "generated_at": "2026-02-28T17:58:39.734810+00:00",
   "agent_id": "chanakya_mimamsa_minister",
   "domain": "public_health",
   "metric_name": "weekly_deaths_all_cause",
@@ -55,5 +55,5 @@
   "escalate": false,
   "narration": null,
   "narration_firewall": "SKIPPED \u2014 Ollama unavailable",
-  "payload_hash": "d29f1906835de4f849821000a1b1dd0e224c53134e9c61e4ab63c1a2a0412454"
+  "payload_hash": "951257bbdffa944fdd4dfc616fce0a58f26dcd9ab61e2824088db38c73f278fc"
 }
