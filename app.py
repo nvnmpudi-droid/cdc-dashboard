@@ -164,7 +164,7 @@ if forecast and forecast.get("forecast"):
     st.caption(f"Trend: {d_icon} {direction} ({pct:+.1f}%)")
     fc_rows = []
     for fc in forecast["forecast"]:
-        fc_rows.append({"Period":fc["ds"][:10],"Forecast":f"{fc['forecast']:,}","Lower 95%":f"{fc['lower_95']:,}","Upper 95%":f"{fc['upper_95']:,}"})
+        fc_rows.append({"Period":fc["period_ending"][:10],"Forecast":f"{fc['forecast']:,}","Lower 95%":f"{fc['lower_95']:,}","Upper 95%":f"{fc['upper_95']:,}"})
     st.table(fc_rows)
 
 # ── Row 7: Audit trail ─────────────────────────────────────────────────────
